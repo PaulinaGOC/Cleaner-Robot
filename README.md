@@ -11,8 +11,8 @@ Antes de ejecutar el proyecto, se recomienda contar con los siguientes elementos
   - Arduino Mega
   - Sensor LiDAR
   - Motores DC veloreductores con encoders (se emplearon unos motores de 76 rpms con encoders __)
-  - Fuente de alimentación de 12 V con 20 A
-  - Chasis del robot (se ve en la sección de cad)
+  - Fuente de alimentación de 12V-20A
+  - Chasis del robot (se ve en la carpetas CAT Parts)
   - Mecanismo de recolección de residuos (se empleó un cepillo controlado por un motor de corriente directa)
   - 2 Puentes H
   - Buck converter 12V-5V
