@@ -68,7 +68,7 @@ Para preguntas o sugerencias:
     - 📥Correo electrónico:
       asa
      
-  - Daniel __
+  - Daniel Yamil Tlilayatzi Muñoz
     - 📥Correo electrónico:
-      asa
+      daniel.tlilayatzimz@udlap.mx
   
