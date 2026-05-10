@@ -26,6 +26,7 @@ Antes de ejecutar el proyecto, se recomienda contar con los siguientes elementos
     - Drivers del LiDAR
     -  RViz 2 (Visualización del robot, del mapa, trayectorias y objetivos de navegación)
     -  Nav2 (Paquete para navegación autónoma)
+    -  Slam_toolbox (Utilizado para grabar el mapa)
 
 # 📓  Introducción 
 Este es un proyecto de robótica móvil enfocado en el desarrollo de un robot autónomo para la recolección de residuos sólidos en espacios controlados, como pasillos, laboratorios, campus universitarios o áreas públicas semi-estructuradas. La idea principal del proyecto es proponer una alternativa tecnológica que apoye las tareas de limpieza, reduciendo actividades manuales repetitivas y mejorando la eficiencia en la recolección de basura.
@@ -61,7 +62,7 @@ Para preguntas o sugerencias:
       
   - Rashid Manzur Rodríguez
     - 📥Correo electrónico:
-      asa
+      rashidmanzurrz@udlap.mx
      
   - Denisse Alvarado Palacios
     - 📥Correo electrónico:
