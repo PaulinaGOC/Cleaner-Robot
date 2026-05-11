@@ -479,10 +479,315 @@ ros2 lifecycle set /slam_toolbox activate
 ```
 
 # SISTEMA SEPARADOR DE BASURA (Banda Transportadora)
-##Propósito
+
+##Propósito del sistema
+
+La banda transportadora forma parte del sistema inteligente de separación de residuos del proyecto de robótica móvil. Su función principal es automatizar la clasificación de basura recolectada por el robot autónomo, permitiendo separar residuos orgánicos e inorgánicos mediante visión artificial y mecanismos electromecánicos.
+
+El sistema está diseñado para funcionar como una estación de clasificación automática, donde los residuos son colocados sobre una banda transportadora, analizados por una cámara y posteriormente desviados hacia diferentes contenedores dependiendo de su categoría.
+
+La finalidad principal del sistema es:
+
+- Reducir la clasificación manual de residuos
+- Mejorar la velocidad del proceso de separación
+- Disminuir errores humanos
+- Implementar visión artificial aplicada al reciclaje
+- Integrar automatización industrial y robótica móvil
+- Crear una solución escalable para manejo inteligente de residuos
+
+---
+
+# Funcionamiento general del sistema
+
+El funcionamiento del sistema separador se divide en varias etapas:
+
+## 1. Alimentación de residuos
+
+Los residuos recolectados por el robot móvil son colocados sobre la banda transportadora. La banda mueve los objetos de forma continua hacia la zona de inspección.
+
+---
+
+## 2. Movimiento de la banda transportadora
+
+La banda es accionada mediante un motor de corriente directa (DC) conectado a un sistema de poleas y rodillos. La velocidad es controlada electrónicamente utilizando PWM desde un microcontrolador.
+
+Esto permite:
+
+- Ajustar la velocidad de desplazamiento
+- Sincronizar el movimiento con el sistema de visión
+- Detener temporalmente la banda durante la detección
+- Optimizar la captura de imágenes
+
+---
+
+## 3. Captura de imagen
+
+Una cámara ubicada sobre la banda transportadora captura imágenes en tiempo real de los residuos.
+
+La cámara trabaja continuamente mientras la banda se encuentra en movimiento y envía las imágenes al sistema de procesamiento.
+
+---
+
+## 4. Procesamiento mediante visión artificial
+
+Las imágenes obtenidas son procesadas utilizando técnicas de visión artificial y redes neuronales.
+
+El sistema analiza:
+
+- Forma del objeto
+- Color
+- Tamaño
+- Textura
+- Características visuales generales
+
+Posteriormente, un modelo de clasificación determina si el residuo pertenece a la categoría:
+
+- Orgánico
+- Inorgánico
+
+---
+
+## 5. Activación del mecanismo separador
+
+Una vez identificado el tipo de residuo, el sistema activa un mecanismo de separación.
+
+Dependiendo del diseño mecánico implementado, el sistema puede utilizar:
+
+- Servomotores
+- Compuertas móviles
+- Brazos desviadores
+- Rampas
+- Empujadores mecánicos
+
+Esto permite redirigir automáticamente el objeto hacia el contenedor correspondiente.
+
+---
+
+## 6. Recolección final
+
+El residuo clasificado cae finalmente en el depósito correspondiente:
+
+- Contenedor de residuos orgánicos
+- Contenedor de residuos inorgánicos
+
+---
+
+# Arquitectura del sistema
+
+El sistema está dividido en tres capas principales:
+
+## Capa mecánica
+
+Encargada del movimiento físico del sistema.
+
+Incluye:
+
+- Banda transportadora
+- Rodillos
+- Chasis estructural
+- Poleas
+- Soportes
+- Compartimentos de clasificación
+
+---
+
+## Capa electrónica
+
+Encargada del control de motores, sensores y comunicación.
+
+Incluye:
+
+- Arduino Nano
+- Drivers de motor DC
+- Potenciómetro para controlar velocidad del motor
+- Fuente de alimentación
+- Sensores
+- Cámara
+- Servomotores
+
+---
+
+## Capa de software
+
+Encargada del procesamiento inteligente.
+
+Incluye:
+
+- Python
+- OpenCV
+- Redes neuronales
+- Algoritmos de clasificación
+- Comunicación serial
+- Lógica de automatización
+
+---
+
+# Materiales utilizados
+
+## Estructura mecánica
+
+| Componente | Descripción |
+|---|---|
+| Perfil de aluminio / MDF / Acrílico | Base estructural del sistema |
+| Banda transportadora de goma | Superficie de desplazamiento |
+| Rodillos | Permiten el movimiento de la banda |
+| Poleas | Transmisión de movimiento |
+| Tornillería | Ensamble mecánico |
+| Soportes impresos en 3D | Sujetan motores y sensores |
+| Contenedores de residuos | Almacenamiento final |
+
+---
+
+## ⚡ Componentes electrónicos
+
+| Componente | Función |
+|---|---|
+| Arduino NANO | Control principal |
+| Driver L298N | Control de motores DC |
+| Motor DC | Movimiento de la banda |
+| Servomotores | Sistema de separación |
+| Fuente de alimentación 12V | Energía del sistema |
+| Buck converter | Conversión de voltaje |
+| Cámara USB | Captura de imágenes, dentro de las cámaras usadas son DroidCam y JABRA |
+| Sensores infrarrojos | Detección de objetos |
+| Cables Dupont | Conexiones |
+| Protoboard | Prototipado |
+
+---
+
+## Software utilizado
+
+| Software | Función |
+|---|---|
+| Python | Programación principal |
+| OpenCV | Procesamiento de imágenes |
+| Arduino IDE | Programación del microcontrolador |
+| Roboflow / Teachable Machine | Clasificación inteligente |
+| VS Code | Desarrollo |
+| Yolov8 | Red Neuronal |
+
+---
+
+# Características principales
+
+## Clasificación automática
+
+El sistema identifica residuos sin intervención humana.
+
+---
+
+## Visión artificial en tiempo real
+
+La cámara analiza continuamente los objetos sobre la banda.
+
+---
+
+## Control automático de velocidad
+
+La velocidad de la banda puede ajustarse mediante PWM.
+
+---
+
+## Sistema modular
+
+El diseño permite agregar nuevos sensores o mecanismos.
+
+---
+
+## Bajo costo
+
+El sistema utiliza componentes accesibles y fáciles de conseguir.
+
+---
+
+##  Escalable
+
+Puede adaptarse para:
+
+- Más categorías de residuos
+- Mayor tamaño
+- Integración industrial
+- Clasificación avanzada
+
+---
+
+# Sistema de visión artificial
+
+##  Cámara
+
+La cámara se coloca en la parte superior de la banda para obtener una vista perpendicular de los residuos.
+
+Características recomendadas:
+
+- Resolución HD
+- Captura en tiempo real
+- Compatibilidad con OpenCV
+- Conexión USB
+
+---
+
+## Procesamiento de imágenes
+
+El sistema utiliza OpenCV para:
+
+- Captura de video
+- Conversión de color
+- Filtrado de imagen
+- Segmentación
+- Detección de contornos
+- Extracción de características
+
+---
+
+##  Clasificación inteligente
+
+La clasificación puede realizarse mediante:
+
+- Redes neuronales convolucionales (CNN)
+- TensorFlow
+- Modelos entrenados personalizados
+- Clasificación basada en color y forma
+
+---
+
+#  Sistema electrónico
+
+## Control de motores
+
+El motor principal de la banda es controlado mediante un puente H L298N.
+
+Funciones:
+
+- Encendido y apagado
+- Cambio de velocidad
+- Cambio de dirección
+- Protección básica
+
+---
+
+## Sensores
+
+Los sensores permiten detectar cuándo un objeto entra en la zona de clasificación.
+
+Tipos posibles:
+
+- Sensores infrarrojos
+- Sensores ultrasónicos
+- Sensores ópticos
+
+---
+
+## Comunicación serial
+
+La comunicación entre Python y Arduino se realiza mediante puerto serial USB.
+
+Velocidad típica:
+
+```bash
+115200 baud
 
 
-# 📖 Referencias y Recursos Adicionales
+#  Referencias y Recursos Adicionales
 
 - ROS 2 Jazzy Documentation: https://docs.ros.org/en/jazzy/
 - Nav2 Documentation: https://docs.nav2.org/
@@ -490,7 +795,7 @@ ros2 lifecycle set /slam_toolbox activate
 - Driver LiDAR LD06: https://github.com/ldrobotSensorTeam/ldlidar_stl_ros2
 - Raspberry Pi Imager: https://www.raspberrypi.com/software/
 
-# 📞 Contacto
+#  Contacto
 Para preguntas o sugerencias: 
 
 - Asesor encargado de la página: Dr. César Martínez Torres
