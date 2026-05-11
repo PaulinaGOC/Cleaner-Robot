@@ -478,8 +478,8 @@ ros2 lifecycle set /slam_toolbox configure
 ros2 lifecycle set /slam_toolbox activate
 ```
 
-## SISTEMA SEPARADOR DE BASURA (Banda Transportadora)
-
+# SISTEMA SEPARADOR DE BASURA (Banda Transportadora)
+##Propósito
 
 
 # 📖 Referencias y Recursos Adicionales
