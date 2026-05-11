@@ -478,313 +478,776 @@ ros2 lifecycle set /slam_toolbox configure
 ros2 lifecycle set /slam_toolbox activate
 ```
 
-# SISTEMA SEPARADOR DE BASURA (Banda Transportadora)
+# SISTEMA SEPARADOR DE BASURA (BANDA TRANSPORTADORA INTELIGENTE)
 
-##Propósito del sistema
+#  Introducción
 
-La banda transportadora forma parte del sistema inteligente de separación de residuos del proyecto de robótica móvil. Su función principal es automatizar la clasificación de basura recolectada por el robot autónomo, permitiendo separar residuos orgánicos e inorgánicos mediante visión artificial y mecanismos electromecánicos.
+Esta sección del proyecto corresponde al sistema inteligente de clasificación de residuos mediante una banda transportadora automatizada.
 
-El sistema está diseñado para funcionar como una estación de clasificación automática, donde los residuos son colocados sobre una banda transportadora, analizados por una cámara y posteriormente desviados hacia diferentes contenedores dependiendo de su categoría.
+El objetivo principal de este sistema es detectar, analizar y clasificar residuos automáticamente utilizando:
 
-La finalidad principal del sistema es:
+- Visión artificial
+- Inteligencia artificial
+- Procesamiento de imágenes
+- Automatización electrónica
 
-- Reducir la clasificación manual de residuos
-- Mejorar la velocidad del proceso de separación
-- Disminuir errores humanos
-- Implementar visión artificial aplicada al reciclaje
-- Integrar automatización industrial y robótica móvil
-- Crear una solución escalable para manejo inteligente de residuos
+El sistema trabaja junto al robot recolector autónomo. Después de que el robot recoge los residuos, estos son enviados hacia la banda transportadora para ser clasificados automáticamente.
 
----
-
-# Funcionamiento general del sistema
-
-El funcionamiento del sistema separador se divide en varias etapas:
-
-## 1. Alimentación de residuos
-
-Los residuos recolectados por el robot móvil son colocados sobre la banda transportadora. La banda mueve los objetos de forma continua hacia la zona de inspección.
-
----
-
-## 2. Movimiento de la banda transportadora
-
-La banda es accionada mediante un motor de corriente directa (DC) conectado a un sistema de poleas y rodillos. La velocidad es controlada electrónicamente utilizando PWM desde un microcontrolador.
-
-Esto permite:
-
-- Ajustar la velocidad de desplazamiento
-- Sincronizar el movimiento con el sistema de visión
-- Detener temporalmente la banda durante la detección
-- Optimizar la captura de imágenes
-
----
-
-## 3. Captura de imagen
-
-Una cámara ubicada sobre la banda transportadora captura imágenes en tiempo real de los residuos.
-
-La cámara trabaja continuamente mientras la banda se encuentra en movimiento y envía las imágenes al sistema de procesamiento.
-
----
-
-## 4. Procesamiento mediante visión artificial
-
-Las imágenes obtenidas son procesadas utilizando técnicas de visión artificial y redes neuronales.
-
-El sistema analiza:
-
-- Forma del objeto
-- Color
-- Tamaño
-- Textura
-- Características visuales generales
-
-Posteriormente, un modelo de clasificación determina si el residuo pertenece a la categoría:
-
-- Orgánico
-- Inorgánico
-
----
-
-## 5. Activación del mecanismo separador
-
-Una vez identificado el tipo de residuo, el sistema activa un mecanismo de separación.
-
-Dependiendo del diseño mecánico implementado, el sistema puede utilizar:
-
-- Servomotores
-- Compuertas móviles
-- Brazos desviadores
-- Rampas
-- Empujadores mecánicos
-
-Esto permite redirigir automáticamente el objeto hacia el contenedor correspondiente.
-
----
-
-## 6. Recolección final
-
-El residuo clasificado cae finalmente en el depósito correspondiente:
-
-- Contenedor de residuos orgánicos
-- Contenedor de residuos inorgánicos
-
----
-
-# Arquitectura del sistema
-
-El sistema está dividido en tres capas principales:
-
-## Capa mecánica
-
-Encargada del movimiento físico del sistema.
-
-Incluye:
-
-- Banda transportadora
-- Rodillos
-- Chasis estructural
-- Poleas
-- Soportes
-- Compartimentos de clasificación
-
----
-
-## Capa electrónica
-
-Encargada del control de motores, sensores y comunicación.
-
-Incluye:
-
-- Arduino Nano
-- Drivers de motor DC
-- Potenciómetro para controlar velocidad del motor
-- Fuente de alimentación
-- Sensores
-- Cámara
-- Servomotores
-
----
-
-## Capa de software
-
-Encargada del procesamiento inteligente.
-
-Incluye:
+Este tutorial está explicado paso a paso, pensando en personas que nunca han trabajado con:
 
 - Python
 - OpenCV
 - Redes neuronales
-- Algoritmos de clasificación
-- Comunicación serial
-- Lógica de automatización
+- Roboflow
+- Arduino
+- Visión artificial
 
 ---
 
-# Materiales utilizados
+# Objetivo del sistema
 
-## Estructura mecánica
+El sistema debe ser capaz de:
 
-| Componente | Descripción |
+ Mover residuos automáticamente mediante una banda transportadora  
+ Detectar objetos mediante sensores  
+ Capturar imágenes utilizando una cámara USB  
+ Clasificar residuos mediante una red neuronal  
+ Separar residuos orgánicos e inorgánicos automáticamente  
+ Activar mecanismos de separación usando Arduino  
+
+---
+
+#  Funcionamiento general del sistema
+
+El sistema funciona siguiendo esta secuencia:
+
+```text
+Encender sistema
+       ↓
+Mover banda transportadora
+       ↓
+Detectar objeto
+       ↓
+Capturar imagen
+       ↓
+Procesar imagen con OpenCV
+       ↓
+Clasificar residuo con IA
+       ↓
+Enviar resultado al Arduino
+       ↓
+Activar mecanismo separador
+       ↓
+Depositar residuo en contenedor
+```
+
+---
+
+#  Materiales necesarios
+
+#  Electrónica
+
+| Componente | Cantidad |
 |---|---|
-| Perfil de aluminio / MDF / Acrílico | Base estructural del sistema |
-| Banda transportadora de goma | Superficie de desplazamiento |
-| Rodillos | Permiten el movimiento de la banda |
-| Poleas | Transmisión de movimiento |
-| Tornillería | Ensamble mecánico |
-| Soportes impresos en 3D | Sujetan motores y sensores |
-| Contenedores de residuos | Almacenamiento final |
+| Arduino Mega | 1 |
+| Driver L298N | 1 |
+| Motor DC | 1 |
+| Servomotor SG90 o MG996R | 1 |
+| Cámara USB | 1 |
+| Sensor infrarrojo | 1 |
+| Fuente de alimentación 12V | 1 |
+| Buck converter 12V-5V | 1 |
+| Protoboard | 1 |
+| Cables Dupont | Varios |
 
 ---
 
-## ⚡ Componentes electrónicos
+# 🛠️ Mecánica
 
-| Componente | Función |
+| Componente | Cantidad |
 |---|---|
-| Arduino NANO | Control principal |
-| Driver L298N | Control de motores DC |
-| Motor DC | Movimiento de la banda |
-| Servomotores | Sistema de separación |
-| Fuente de alimentación 12V | Energía del sistema |
-| Buck converter | Conversión de voltaje |
-| Cámara USB | Captura de imágenes, dentro de las cámaras usadas son DroidCam y JABRA |
-| Sensores infrarrojos | Detección de objetos |
-| Cables Dupont | Conexiones |
-| Protoboard | Prototipado |
+| Banda transportadora | 1 |
+| Rodillos | 2 |
+| Poleas | 2 |
+| Chasis MDF o aluminio | 1 |
+| Tornillería | Varias |
+| Contenedores de residuos | 2 |
 
 ---
 
-## Software utilizado
+# 💻 Software necesario
 
 | Software | Función |
 |---|---|
-| Python | Programación principal |
-| OpenCV | Procesamiento de imágenes |
-| Arduino IDE | Programación del microcontrolador |
-| Roboflow / Teachable Machine | Clasificación inteligente |
-| VS Code | Desarrollo |
-| Yolov8 | Red Neuronal |
+| Ubuntu 24.04 | Sistema operativo |
+| Python 3 | Programación |
+| OpenCV | Visión artificial |
+| Arduino IDE | Programar Arduino |
+| VS Code | Editor |
+| Roboflow | Entrenamiento IA |
 
 ---
 
-# Características principales
+# 📂 Estructura de carpetas
 
-## Clasificación automática
+Primero debemos crear la estructura completa del proyecto.
 
-El sistema identifica residuos sin intervención humana.
+## 📁 Crear carpeta principal
 
----
-
-## Visión artificial en tiempo real
-
-La cámara analiza continuamente los objetos sobre la banda.
-
----
-
-## Control automático de velocidad
-
-La velocidad de la banda puede ajustarse mediante PWM.
-
----
-
-## Sistema modular
-
-El diseño permite agregar nuevos sensores o mecanismos.
-
----
-
-## Bajo costo
-
-El sistema utiliza componentes accesibles y fáciles de conseguir.
-
----
-
-##  Escalable
-
-Puede adaptarse para:
-
-- Más categorías de residuos
-- Mayor tamaño
-- Integración industrial
-- Clasificación avanzada
-
----
-
-# Sistema de visión artificial
-
-##  Cámara
-
-La cámara se coloca en la parte superior de la banda para obtener una vista perpendicular de los residuos.
-
-Características recomendadas:
-
-- Resolución HD
-- Captura en tiempo real
-- Compatibilidad con OpenCV
-- Conexión USB
-
----
-
-## Procesamiento de imágenes
-
-El sistema utiliza OpenCV para:
-
-- Captura de video
-- Conversión de color
-- Filtrado de imagen
-- Segmentación
-- Detección de contornos
-- Extracción de características
-
----
-
-##  Clasificación inteligente
-
-La clasificación puede realizarse mediante:
-
-- Redes neuronales convolucionales (CNN)
-- TensorFlow
-- Modelos entrenados personalizados
-- Clasificación basada en color y forma
-
----
-
-#  Sistema electrónico
-
-## Control de motores
-
-El motor principal de la banda es controlado mediante un puente H L298N.
-
-Funciones:
-
-- Encendido y apagado
-- Cambio de velocidad
-- Cambio de dirección
-- Protección básica
-
----
-
-## Sensores
-
-Los sensores permiten detectar cuándo un objeto entra en la zona de clasificación.
-
-Tipos posibles:
-
-- Sensores infrarrojos
-- Sensores ultrasónicos
-- Sensores ópticos
-
----
-
-## Comunicación serial
-
-La comunicación entre Python y Arduino se realiza mediante puerto serial USB.
-
-Velocidad típica:
+Abrir terminal:
 
 ```bash
-115200 baud
+mkdir banda_clasificadora
+cd banda_clasificadora
+```
+
+---
+
+# 📁 Crear carpetas internas
+
+Ejecutar:
+
+```bash
+mkdir dataset
+mkdir modelos
+mkdir capturas
+mkdir codigos
+mkdir arduino
+```
+
+La estructura final debe verse así:
+
+```text
+banda_clasificadora/
+│
+├── dataset/
+├── modelos/
+├── capturas/
+├── codigos/
+└── arduino/
+```
+
+---
+
+#  Instalar Python y OpenCV
+
+#  Paso 1 — Actualizar sistema
+
+```bash
+sudo apt update
+sudo apt upgrade
+```
+
+---
+
+#  Paso 2 — Instalar Python
+
+Verificar Python:
+
+```bash
+python3 --version
+```
+
+---
+
+#  Paso 3 — Instalar pip
+
+```bash
+sudo apt install python3-pip
+```
+
+---
+
+#  Paso 4 — Instalar OpenCV
+
+```bash
+pip install opencv-python
+```
+
+---
+
+#  Paso 5 — Instalar librerías adicionales
+
+```bash
+pip install numpy
+pip install pyserial
+pip install ultralytics
+pip install inference
+```
+
+---
+
+#  Configuración de cámara USB
+
+#  Verificar cámara
+
+Conectar la cámara USB.
+
+Ejecutar:
+
+```bash
+ls /dev/video*
+```
+
+Debe aparecer algo como:
+
+```bash
+/dev/video0
+```
+
+Eso significa que Ubuntu detectó correctamente la cámara.
+
+---
+
+# Probar cámara con Python
+
+Ir a la carpeta:
+
+```bash
+cd ~/banda_clasificadora/codigos
+```
+
+Crear archivo:
+
+```bash
+nano prueba_camara.py
+```
+
+Pegar:
+
+```python
+import cv2
+
+cap = cv2.VideoCapture(0)
+
+while True:
+    ret, frame = cap.read()
+
+    cv2.imshow("Camara", frame)
+
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+cap.release()
+cv2.destroyAllWindows()
+```
+
+Guardar con:
+
+```bash
+CTRL + O
+ENTER
+CTRL + X
+```
+
+Ejecutar:
+
+```bash
+python3 prueba_camara.py
+```
+
+Cerrar presionando:
+
+```text
+q
+```
+
+---
+
+#  Entrenamiento de red neuronal en Roboflow
+
+#  ¿Qué es Roboflow?
+
+Roboflow es una plataforma que permite entrenar modelos de inteligencia artificial para detectar objetos utilizando imágenes.
+
+En este proyecto se utilizará para clasificar:
+
+- Residuos orgánicos
+- Residuos inorgánicos
+
+---
+
+#  Paso 1 — Crear cuenta
+
+Entrar a:
+
+```text
+https://roboflow.com
+```
+
+Crear cuenta gratuita.
+
+---
+
+#  Paso 2 — Crear proyecto
+
+Dar click en:
+
+```text
+Create New Project
+```
+
+Seleccionar:
+
+| Opción | Valor |
+|---|---|
+| Project Type | Object Detection |
+| Nombre | basura_detector |
+| Categorías | organico, inorganico |
+
+---
+
+#  Paso 3 — Subir imágenes
+
+Subir imágenes de residuos.
+
+Se recomienda:
+
+- 100 imágenes mínimo por categoría
+- Diferentes ángulos
+- Diferente iluminación
+- Diferentes tamaños
+
+---
+
+# Paso 4 — Etiquetar imágenes
+
+Seleccionar cada imagen.
+
+Dibujar un cuadro alrededor del objeto.
+
+Asignar clase:
+
+```text
+organico
+```
+
+o
+
+```text
+inorganico
+```
+
+---
+
+# Paso 5 — Generar dataset
+
+Dar click en:
+
+```text
+Generate Dataset
+```
+
+Seleccionar:
+
+```text
+YOLOv8
+```
+
+---
+
+# Paso 6 — Entrenar modelo
+
+Dar click en:
+
+```text
+Train Model
+```
+
+Esperar a que Roboflow termine el entrenamiento.
+
+---
+
+#  Paso 7 — Obtener API Key
+
+Ir a:
+
+```text
+Workspace Settings
+```
+
+Copiar:
+
+```text
+API KEY
+```
+
+---
+
+# Paso 8 — Obtener código de inferencia
+
+Roboflow proporciona automáticamente código Python.
+
+---
+
+# Descargar modelo entrenado
+
+Ir a:
+
+```text
+Deploy
+```
+
+Seleccionar:
+
+```text
+Python
+```
+
+Copiar el código.
+
+---
+
+#  Crear código principal
+
+Ir a:
+
+```bash
+cd ~/banda_clasificadora/codigos
+```
+
+Crear archivo:
+
+```bash
+nano clasificador.py
+```
+
+---
+
+#  Código completo
+
+Pegar:
+
+```python
+from inference import get_model
+import cv2
+
+model = get_model(
+    model_id="TU_MODELO/1",
+    api_key="TU_API_KEY"
+)
+
+cap = cv2.VideoCapture(0)
+
+while True:
+
+    ret, frame = cap.read()
+
+    results = model.infer(frame)
+
+    predictions = results[0].predictions
+
+    for pred in predictions:
+
+        x = int(pred.x)
+        y = int(pred.y)
+        w = int(pred.width)
+        h = int(pred.height)
+
+        clase = pred.class_name
+
+        cv2.rectangle(
+            frame,
+            (x-w//2, y-h//2),
+            (x+w//2, y+h//2),
+            (0,255,0),
+            2
+        )
+
+        cv2.putText(
+            frame,
+            clase,
+            (x, y),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            1,
+            (0,255,0),
+            2
+        )
+
+    cv2.imshow("Clasificador", frame)
+
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+cap.release()
+cv2.destroyAllWindows()
+```
+
+---
+
+#  Ejecutar clasificador
+
+Ejecutar:
+
+```bash
+python3 clasificador.py
+```
+
+La cámara comenzará a detectar residuos automáticamente.
+
+---
+
+#  Comunicación entre Python y Arduino
+
+#  Objetivo
+
+Cuando Python detecta:
+
+```text
+organico
+```
+
+o
+
+```text
+inorganico
+```
+
+enviará información al Arduino para activar el mecanismo separador.
+
+---
+
+# Conectar Arduino
+
+Conectar Arduino Mega por USB.
+
+Verificar puerto:
+
+```bash
+ls /dev/ttyACM*
+```
+
+Debe aparecer:
+
+```bash
+/dev/ttyACM0
+```
+
+---
+
+#  Código Arduino
+
+Abrir Arduino IDE.
+
+Crear archivo:
+
+```text
+clasificador_arduino.ino
+```
+
+Pegar:
+
+```cpp
+#include <Servo.h>
+
+Servo servo;
+
+String dato = "";
+
+void setup() {
+
+  Serial.begin(115200);
+
+  servo.attach(9);
+
+  servo.write(90);
+}
+
+void loop() {
+
+  if (Serial.available()) {
+
+    dato = Serial.readStringUntil('\n');
+
+    if (dato == "organico") {
+
+      servo.write(30);
+      delay(1000);
+      servo.write(90);
+    }
+
+    if (dato == "inorganico") {
+
+      servo.write(150);
+      delay(1000);
+      servo.write(90);
+    }
+  }
+}
+```
+
+---
+
+#  Subir código Arduino
+
+1. Abrir Arduino IDE
+2. Seleccionar Arduino Mega
+3. Seleccionar puerto
+4. Dar click en Upload
+
+---
+
+#  Código Python con comunicación serial
+
+Editar:
+
+```bash
+nano clasificador.py
+```
+
+Agregar:
+
+```python
+import serial
+
+arduino = serial.Serial('/dev/ttyACM0',115200)
+```
+
+---
+
+#  Enviar clasificación
+
+Debajo de:
+
+```python
+clase = pred.class_name
+```
+
+Agregar:
+
+```python
+arduino.write((clase + "\n").encode())
+```
+
+---
+
+#  Ejecutar sistema completo
+
+## Terminal 1
+
+```bash
+cd ~/banda_clasificadora/codigos
+python3 clasificador.py
+```
+
+## Terminal 2
+
+Abrir Arduino IDE.
+
+Verificar que el código esté cargado.
+
+---
+
+# ⚙️ Funcionamiento del sistema completo
+
+## 1. La banda mueve el residuo
+
+↓
+
+## 2. El sensor detecta el objeto
+
+↓
+
+## 3. La cámara captura imagen
+
+↓
+
+## 4. OpenCV procesa la imagen
+
+↓
+
+## 5. La red neuronal clasifica
+
+↓
+
+## 6. Python envía resultado al Arduino
+
+↓
+
+## 7. Arduino mueve el servomotor
+
+↓
+
+## 8. El residuo cae en el contenedor correcto
+
+---
+
+# Problemas comunes
+
+# La cámara no funciona
+
+Verificar:
+
+```bash
+ls /dev/video*
+```
+
+---
+
+# Arduino no detectado
+
+Verificar:
+
+```bash
+ls /dev/ttyACM*
+```
+
+---
+
+# Error de permisos seriales
+
+Ejecutar:
+
+```bash
+sudo usermod -aG dialout $USER
+newgrp dialout
+```
+
+---
+
+#  OpenCV no instalado
+
+Ejecutar:
+
+```bash
+pip install opencv-python
+```
+
+---
+
+#  Mejoras futuras
+
+- Más categorías de residuos
+- Detección multicategoría
+- Clasificación industrial
+- Dashboard web
+- IA local sin internet
+- Sistema neumático
+- Banda industrial
+
+---
+
+#  Conclusión
+
+El sistema de banda transportadora inteligente integra:
+
+- Automatización
+- Visión artificial
+- Inteligencia artificial
+- Electrónica
+- Mecánica
+
+permitiendo desarrollar una solución automática de clasificación de residuos sólidos.
+
+Además de su aplicación práctica, el proyecto sirve como plataforma educativa para aprender:
+
+- Python
+- OpenCV
+- Roboflow
+- Arduino
+- Inteligencia artificial
+- Automatización industrial
+- Procesamiento digital de imágenes
 
 
 #  Referencias y Recursos Adicionales
