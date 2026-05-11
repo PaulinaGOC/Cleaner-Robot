@@ -478,6 +478,10 @@ ros2 lifecycle set /slam_toolbox configure
 ros2 lifecycle set /slam_toolbox activate
 ```
 
+## SISTEMA SEPARADOR DE BASURA (Banda Transportadora)
+
+
+
 # 📖 Referencias y Recursos Adicionales
 
 - ROS 2 Jazzy Documentation: https://docs.ros.org/en/jazzy/
@@ -503,8 +507,7 @@ Para preguntas o sugerencias:
       rashidmanzurrz@udlap.mx
      
   - Denisse Alvarado Palacios
-    - 📥Correo electrónico:
-      asa
+    - 📥Correo electrónico: denisse.alvaradop@gmail.com
      
   - Daniel Yamil Tlilayatzi Muñoz
     - 📥Correo electrónico:
