@@ -1,5 +1,5 @@
 # Tutorial: Sistema de Recolección y Separación de basura
-El funcionamu funcionamiento se divide en dos partes:
+El funcionamiento se divide en dos partes:
 La primera parte se basa  en un robot móvil autónomo diseñado para apoyar la recolección de residuos sólidos en espacios controlados. El robot inicia con el encendido del sistema y la inicialización de la Raspberry Pi, Arduino y ROS 2. Posteriormente, el robot comienza la lectura de sensores, principalmente el LiDAR, para detectar obstáculos y comprender su entorno.
 Una vez iniciado el sistema, el robot navega de manera autónoma siguiendo una ruta o puntos de referencia. Si detecta un obstáculo, evita la colisión y recalcula su trayectoria. Si detecta un residuo, se posiciona frente a él, activa el mecanismo de recolección y almacena el objeto dentro de su compartimiento interno.Luego, en la segunda parte consiste en clasificar y separar los residuos recolectados. Para ello, se utiliza una banda transportadora que, a través de visión y una red neuronal, puede clasificar residuos orgánicos e inorgánicos
 
@@ -23,7 +23,7 @@ Antes de ejecutar el proyecto, se recomienda contar con los siguientes elementos
   - Python
   - Arduino IDE
   - Librerías de Desarrollo para ROS 2:
-    - Drivers del LiDAR
+    - Drivers del LiDAR (ldlidar_stl_ros2 - driver del LiDAR LD06, se clona desde GitHub)
     -  RViz 2 (Visualización del robot, del mapa, trayectorias y objetivos de navegación)
     -  Nav2 (Paquete para navegación autónoma)
     -  Slam_toolbox (Utilizado para grabar el mapa)
@@ -35,15 +35,62 @@ La navegación autónoma del robot se implementa mediante ROS 2 Jazzy y Nav2, he
 En cuanto a su funcionamiento general, este consiste en iniciar el sistema, leer la información de los sensores, navegar de forma autónoma por una ruta definida, detectar obstáculos, posicionarse frente a los residuos y activar un mecanismo de recolección para almacenarlos dentro de un compartimiento interno. 
 Además, el proyecto contempla la integración de visión artificial para identificar y clasificar residuos en categorías como orgánicos e inorgánicos gracias al uso de una cámara y una banda transportadora.
 
+# 🧩 Arquitectura del sistema
+El robot está dividido en dos capas de control que se comunican entre sí:
+Capa alta (Raspberry Pi 5)
+
+-Ejecuta Ubuntu 24.04 LTS y ROS 2 Jazzy
+-Procesa los datos del LiDAR
+-Ejecuta el algoritmo de SLAM (slam_toolbox)
+-Ejecuta la navegación autónoma (Nav2)
+-Visualiza el estado del sistema en RViz2
+-Envía comandos de velocidad al Arduino vía USB serial
+
+Capa baja (Arduino Mega)
+
+-Recibe comandos de velocidad lineal y angular
+-Convierte estos comandos a señales PWM para cada motor
+-Controla la dirección de los motores a través de los puentes H L298N
+-Lee los encoders por interrupción (en cuadratura)
+-Calcula la odometría del robot en tiempo real
+-Envía la odometría de regreso a la Raspberry Pi
+
 # 💾 Instalación necesaria:
 Para instalar ROS 2 Jazzy correctamente, lo más importante es elegir bien el sistema operativo y no quedarse corto de RAM/almacenamiento, sobre todo si vas a usar Nav2, RViz, LiDAR y compilación con colcon.
 
 - Sistema Operativo: Ubuntu Server 24.04 LTS (puede ser a través de partición o con máquina virtual)
 - RAM: 8GB mínimo
-- Almacenamiento: 64 GB o superior
+- Almacenamiento: 32 GB o superior
 - Procesador: Raspberry Pi 5
 - Puertos USB: Para conexión de LiDAR y Arduino
+
 # 🛠️ Instrucciones 
+
+🔌 Diagrama de conexiones eléctricas
+Conexiones del Arduino Mega a los puentes H L298N
+|Componente L298N |Pin Arduino Mega|Notas|
+|:----------------:|:--------------:|:-------:|
+|L298N #1 (motores de tracción)|
+|:------------:|
+ENA (Enable motor A)6 (PWM)Velocidad motor derechoIN124Dirección motor derechoIN225Dirección motor derechoENB (Enable motor B)5 (PWM)Velocidad motor izquierdoIN322Dirección motor izquierdoIN423Dirección motor izquierdoL298N #2 (rodillo recolector)ENA9 (PWM)Velocidad rodilloIN126Dirección rodilloIN227Dirección rodillo
+Conexiones de los encoders al Arduino
+EncoderPin Arduino MegaNotasEncoder izquierdo - Canal A2Pin de interrupciónEncoder izquierdo - Canal B4Lectura digitalEncoder derecho - Canal A3Pin de interrupciónEncoder derecho - Canal B7Lectura digitalVCC encoders5V (Arduino)GND encodersGND (Arduino)
+
+⚠️ Importante: los canales A de los encoders deben conectarse a pines de interrupción del Arduino Mega (pines 2, 3, 18, 19, 20 o 21). El Arduino Uno solo tiene 2 y 3.
+
+Alimentación
+ConexiónVoltajeNotasFuente 12V → Entrada L298N #1 (VCC motores)12VAlimentación motores tracciónFuente 12V → Entrada L298N #2 (VCC motor)12VAlimentación motor rodilloFuente 12V → Buck converter12V→5VPara Raspberry PiBuck 5V → Raspberry Pi (USB-C o pines GPIO)5V, mínimo 3ARaspberry Pi USB → Arduino Mega5V vía USBAlimenta y comunica al ArduinoGND común—Todos los GND deben estar conectados entre sí
+Comunicación Raspberry Pi ↔ Arduino
+
+Cable USB tipo B desde la Raspberry Pi al Arduino Mega.
+El Arduino se reconoce como /dev/ttyACM0 o /dev/ttyACM1 en Ubuntu.
+Velocidad de comunicación: 115200 baud.
+
+Conexión del LiDAR LD06
+
+Conectar al puerto USB de la Raspberry Pi mediante el adaptador USB-Serial que viene incluido.
+El LiDAR se reconoce como /dev/ttyUSB0.
+
 
 
 # 📖 Referencias y Recursos Adicionales
