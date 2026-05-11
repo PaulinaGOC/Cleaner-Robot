@@ -64,26 +64,65 @@ Para instalar ROS 2 Jazzy correctamente, lo más importante es elegir bien el si
 - Procesador: Raspberry Pi 5
 - Puertos USB: Para conexión de LiDAR y Arduino
 
-## Paso 1: Instalación de Ubuntu 24.04 Desktop en la Raspberry Pi 5
+## Paso 1: Instalación de Ubuntu 24.04 Desktop
 
-1. Descarga Raspberry Pi Imager desde https://www.raspberrypi.com/software/
-2. Inserta la tarjeta microSD (mínimo 32 GB) en tu computadora
-3. Abre Raspberry Pi Imager y selecciona:
-   - Dispositivo: Raspberry Pi 5
-   - Sistema operativo: Ubuntu Desktop 24.04 LTS (64-bit)
-   - Almacenamiento: tu tarjeta microSD
-4. Antes de escribir, click en el ícono de engrane (⚙️) para configurar:
-   - Hostname (ejemplo: raspberry)
-   - Habilitar SSH (opcional pero recomendado para conexión remota)
-   - Usuario y contraseña
-   - Red Wi-Fi
-   - Zona horaria
-5. Click en "Write" y espera a que termine
-6. Inserta la microSD en la Raspberry Pi 5, enciéndela y completa el asistente inicial de Ubuntu
+Instala Ubuntu 24.04 Desktop en la Raspberry Pi 5.
 
-## Paso 2: Preparación del sistema antes de ROS 2
+Verifica la versión de Python:
 
-Una vez iniciada la Raspberry y dentro del escritorio de Ubuntu, abre una terminal y ejecuta:
+```bash
+python3 --version
+```
+
+## Paso 2: Actualizar el sistema
+
+```bash
+sudo apt update
+sudo apt upgrade
+```
+
+Instala VS Code desde el centro de aplicaciones de Ubuntu.
+
+Reinicia el sistema.
+
+## Paso 3: Instalar herramientas útiles para desarrollo
+
+```bash
+# Terminator (terminal con múltiples paneles)
+sudo apt install -y terminator
+
+# Tree (para visualizar estructura de carpetas)
+sudo apt install -y tree
+tree --version
+
+# Python helpers
+sudo apt install python-is-python3
+sudo apt install python3-pip
+
+# Monitoreo del sistema
+sudo apt install -y htop
+
+# Búsqueda rápida en archivos
+sudo apt install -y ripgrep
+```
+
+## Paso 4: Instalación de ROS 2 Jazzy
+
+Ejecuta el siguiente comando completo (es un solo comando largo con múltiples pasos encadenados con &&):
+
+```bash
+sudo apt update && sudo apt install -y software-properties-common curl && sudo add-apt-repository universe -y && sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null && sudo apt update && sudo apt install -y ros-jazzy-desktop
+```
+
+## Paso 5: Configurar ROS 2 al iniciar la terminal
+
+```bash
+source /opt/ros/jazzy/setup.bash
+echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+```
+
+## Paso 6: Permisos del puerto serial para el Arduino
 
 ```bash
 # Agregar el usuario al grupo dialout (necesario para acceder al Arduino por USB)
@@ -96,40 +135,7 @@ sudo apt remove -y brltty
 newgrp dialout
 ```
 
-## Paso 3: Instalación de ROS 2 Jazzy
-
-```bash
-# Actualizar el sistema
-sudo apt update && sudo apt upgrade -y
-
-# Instalar dependencias
-sudo apt install -y software-properties-common curl
-sudo add-apt-repository universe -y
-
-# Agregar la clave GPG de ROS 2
-sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
-
-# Agregar el repositorio de ROS 2
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
-
-sudo apt update
-
-# Instalar ROS 2 Jazzy completo
-sudo apt install -y ros-jazzy-desktop
-
-# Herramientas de desarrollo
-sudo apt install -y python3-colcon-common-extensions python3-rosdep python3-argcomplete
-
-# Inicializar rosdep
-sudo rosdep init
-rosdep update
-
-# Cargar ROS 2 automáticamente al abrir terminal
-echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc
-source ~/.bashrc
-```
-
-## Paso 4: Instalación de paquetes específicos del robot
+## Paso 7: Instalación de paquetes específicos del robot
 
 ```bash
 # Nav2 (navegación autónoma)
@@ -146,9 +152,16 @@ sudo apt install -y python3-serial
 
 # Arduino IDE
 sudo apt install -y arduino
+
+# Herramientas de desarrollo ROS 2
+sudo apt install -y python3-colcon-common-extensions python3-rosdep python3-argcomplete
+
+# Inicializar rosdep
+sudo rosdep init
+rosdep update
 ```
 
-## Paso 5: Crear el workspace ROS 2 y clonar el driver del LiDAR
+## Paso 8: Crear el workspace ROS 2 y clonar el driver del LiDAR
 
 ```bash
 # Crear estructura del workspace
@@ -168,7 +181,7 @@ echo "source ~/ros2_ws/install/setup.bash" >> ~/.bashrc
 source ~/.bashrc
 ```
 
-## Paso 6: Estructura del paquete del robot
+## Paso 9: Estructura del paquete del robot
 
 Crea el paquete y la estructura de carpetas:
 
@@ -202,7 +215,7 @@ robot_recolector/
 
 Los archivos completos están disponibles en este repositorio. Cópialos a las carpetas correspondientes.
 
-## Paso 7: Compilar el paquete del robot
+## Paso 10: Compilar el paquete del robot
 
 ```bash
 cd ~/ros2_ws
@@ -210,7 +223,7 @@ colcon build --packages-select robot_recolector
 source install/setup.bash
 ```
 
-## Paso 8: Subir el firmware al Arduino
+## Paso 11: Subir el firmware al Arduino
 
 1. Abre el Arduino IDE
 2. Conecta el Arduino Mega por USB a la Raspberry
