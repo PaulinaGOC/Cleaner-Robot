@@ -491,9 +491,9 @@ El objetivo principal de este sistema es detectar, analizar y clasificar residuo
 - Procesamiento de imágenes
 - Automatización electrónica
 
-El sistema trabaja junto al robot recolector autónomo. Después de que el robot recoge los residuos, estos son enviados hacia la banda transportadora para ser clasificados automáticamente.
+El sistema trabaja junto al robot recolector autónomo. Después de que el robot recoge los residuos, estos son enviados hacia la banda transportadora para ser clasificados automáticamente. Por el momento la clasificación es entre orgánico e inorgánico. 
 
-Este tutorial está explicado paso a paso, pensando en personas que nunca han trabajado con:
+Este tutorial está explicado paso a paso, pensando que se pueda replicar y mejorar en el futuro:
 
 - Python
 - OpenCV
@@ -508,12 +508,12 @@ Este tutorial está explicado paso a paso, pensando en personas que nunca han tr
 
 El sistema debe ser capaz de:
 
- Mover residuos automáticamente mediante una banda transportadora  
- Detectar objetos mediante sensores  
- Capturar imágenes utilizando una cámara USB  
- Clasificar residuos mediante una red neuronal  
- Separar residuos orgánicos e inorgánicos automáticamente  
- Activar mecanismos de separación usando Arduino  
+-- Mover residuos automáticamente mediante una banda transportadora  
+-- Detectar objetos mediante sensores  
+-- Capturar imágenes utilizando una cámara USB  
+-- Clasificar residuos mediante una red neuronal  
+-- Separar residuos orgánicos e inorgánicos automáticamente  
+-- Activar mecanismos de separación usando Arduino Nano  
 
 ---
 
@@ -526,13 +526,15 @@ Encender sistema
        ↓
 Mover banda transportadora
        ↓
+Colocar uno a uno los residuos en la banda
+       ↓
 Detectar objeto
        ↓
 Capturar imagen
        ↓
 Procesar imagen con OpenCV
        ↓
-Clasificar residuo con IA
+Clasificar residuo con Red Neuronal
        ↓
 Enviar resultado al Arduino
        ↓
@@ -562,7 +564,7 @@ Depositar residuo en contenedor
 
 ---
 
-# 🛠️ Mecánica
+#  Mecánica
 
 | Componente | Cantidad |
 |---|---|
@@ -575,37 +577,28 @@ Depositar residuo en contenedor
 
 ---
 
-# 💻 Software necesario
+#  Software necesario
 
 | Software | Función |
 |---|---|
-| Ubuntu 24.04 | Sistema operativo |
+| Visual Studio | Editor |
 | Python 3 | Programación |
 | OpenCV | Visión artificial |
-| Arduino IDE | Programar Arduino |
-| VS Code | Editor |
+| Arduino IDE | Programar Arduino c++ |
 | Roboflow | Entrenamiento IA |
 
 ---
 
-# 📂 Estructura de carpetas
+# Estructura del Proyecto
 
-Primero debemos crear la estructura completa del proyecto.
-
-## 📁 Crear carpeta principal
-
-Abrir terminal:
+Crear carpeta principal:
 
 ```bash
-mkdir banda_clasificadora
-cd banda_clasificadora
+mkdir banda_inteligente
+cd banda_inteligente
 ```
 
----
-
-# 📁 Crear carpetas internas
-
-Ejecutar:
+Crear carpetas internas:
 
 ```bash
 mkdir dataset
@@ -618,7 +611,7 @@ mkdir arduino
 La estructura final debe verse así:
 
 ```text
-banda_clasificadora/
+banda_inteligente/
 │
 ├── dataset/
 ├── modelos/
@@ -629,36 +622,110 @@ banda_clasificadora/
 
 ---
 
-#  Instalar Python y OpenCV
+# Instalación del Entorno Python en Windows (Visual Studio Code)
 
-#  Paso 1 — Actualizar sistema
+---
 
-```bash
-sudo apt update
-sudo apt upgrade
+# Paso 1 — Instalar Python
+
+Descargar Python desde:
+
+```text
+https://www.python.org/downloads/
+```
+
+Durante la instalación:
+
+ ACTIVAR la opción:
+
+```text
+Add Python to PATH
+```
+
+Después dar click en:
+
+```text
+Install Now
 ```
 
 ---
 
-#  Paso 2 — Instalar Python
+#  Paso 2 — Verificar Instalación de Python
+
+Abrir:
+
+```text
+Visual Studio Code
+```
+
+Abrir terminal en VS Code:
+
+```text
+Terminal → New Terminal
+```
 
 Verificar Python:
 
 ```bash
-python3 --version
+python --version
+```
+
+Debe aparecer algo similar a:
+
+```text
+Python 3.12.0
 ```
 
 ---
 
-#  Paso 3 — Instalar pip
+#  Paso 3 — Verificar pip
+
+Ejecutar:
 
 ```bash
-sudo apt install python3-pip
+pip --version
+```
+
+Si aparece una versión, pip quedó instalado correctamente.
+
+---
+
+#  Paso 4 — Crear Carpeta del Proyecto
+
+En terminal:
+
+```bash
+mkdir banda_inteligente
+cd banda_inteligente
+```
+
+Crear carpetas internas:
+
+```bash
+mkdir dataset
+mkdir modelos
+mkdir capturas
+mkdir codigos
+mkdir arduino
 ```
 
 ---
 
-#  Paso 4 — Instalar OpenCV
+#  Paso 5 — Abrir Proyecto en Visual Studio Code
+
+Ejecutar:
+
+```bash
+code .
+```
+
+Esto abrirá automáticamente la carpeta del proyecto en VS Code.
+
+---
+
+# Paso 6 — Instalar OpenCV
+
+En terminal de VS Code ejecutar:
 
 ```bash
 pip install opencv-python
@@ -666,54 +733,198 @@ pip install opencv-python
 
 ---
 
-#  Paso 5 — Instalar librerías adicionales
-
-```bash
-pip install numpy
-pip install pyserial
-pip install ultralytics
-pip install inference
-```
-
----
-
-#  Configuración de cámara USB
-
-#  Verificar cámara
-
-Conectar la cámara USB.
+# Paso 7 — Instalar NumPy
 
 Ejecutar:
 
 ```bash
-ls /dev/video*
+pip install numpy
 ```
-
-Debe aparecer algo como:
-
-```bash
-/dev/video0
-```
-
-Eso significa que Ubuntu detectó correctamente la cámara.
 
 ---
 
-# Probar cámara con Python
+# Paso 8 — Instalar Comunicación Serial
 
-Ir a la carpeta:
+Ejecutar:
 
 ```bash
-cd ~/banda_clasificadora/codigos
+pip install pyserial
 ```
+
+---
+
+# Paso 9 — Instalar YOLOv8
+
+Ejecutar:
+
+```bash
+pip install ultralytics
+```
+
+---
+
+# Paso 10 — Verificar Librerías Instaladas
+
+Ejecutar:
+
+```bash
+pip list
+```
+
+Deben aparecer librerías como:
+
+```text
+opencv-python
+numpy
+pyserial
+ultralytics
+```
+
+---
+
+# Paso 11 — Seleccionar Intérprete Python en VS Code
+
+En Visual Studio Code:
+
+```text
+CTRL + SHIFT + P
+```
+
+Buscar:
+
+```text
+Python: Select Interpreter
+```
+
+Seleccionar la versión instalada de Python.
+
+---
+
+# Paso 12 — Verificar Cámara USB
+
+Conectar cámara USB.
 
 Crear archivo:
 
-```bash
-nano prueba_camara.py
+```text
+prueba_camara.py
 ```
 
-Pegar:
+Ejecutar desde terminal:
+
+```bash
+python prueba_camara.py
+```
+
+---
+
+# Paso 13 — Verificar Puerto Arduino
+
+Conectar Arduino por USB.
+
+Abrir:
+
+```text
+Administrador de dispositivos
+```
+
+Ir a:
+
+```text
+Puertos (COM y LPT)
+```
+
+Debe aparecer algo similar a:
+
+```text
+Arduino Mega (COM3)
+```
+
+o
+
+```text
+Arduino Uno (COM4)
+```
+
+Ese puerto COM será utilizado en Python.
+
+---
+
+#  Paso 14 — Instalar Extensión Python en VS Code
+
+Ir a:
+
+```text
+Extensions
+```
+
+Buscar:
+
+```text
+Python
+```
+
+Instalar la extensión oficial de Microsoft.
+
+
+# Configuración de Cámara USB en Windows
+
+---
+
+# Paso 1 — Conectar la Cámara USB
+
+Conectar la cámara USB a la computadora.
+
+Esperar unos segundos a que Windows instale automáticamente los drivers.
+
+---
+
+#  Paso 2 — Verificar que Windows Detecte la Cámara
+
+Abrir:
+
+```text
+Administrador de dispositivos
+```
+
+Ir a la sección:
+
+```text
+Cámaras
+```
+
+o
+
+```text
+Dispositivos de imagen
+```
+
+Debe aparecer algo similar a:
+
+```text
+USB Camera
+```
+
+o el nombre de la cámara conectada.
+
+Si la cámara NO aparece:
+
+- Cambiar puerto USB
+- Reiniciar la computadora
+- Verificar drivers
+- Probar otra cámara
+
+---
+
+#  Paso 3 — Verificar Cámara en Python
+
+Crear archivo:
+
+```text
+prueba_camara.py
+```
+
+Pegar el siguiente código:
 
 ```python
 import cv2
@@ -721,9 +932,14 @@ import cv2
 cap = cv2.VideoCapture(0)
 
 while True:
+
     ret, frame = cap.read()
 
-    cv2.imshow("Camara", frame)
+    if not ret:
+        print("No se pudo abrir la cámara")
+        break
+
+    cv2.imshow("Prueba de Cámara", frame)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
@@ -732,91 +948,258 @@ cap.release()
 cv2.destroyAllWindows()
 ```
 
-Guardar con:
+---
+
+#  Paso 4 — Ejecutar la Prueba
+
+Abrir terminal en Visual Studio Code y ejecutar:
 
 ```bash
-CTRL + O
-ENTER
-CTRL + X
+python prueba_camara.py
 ```
 
-Ejecutar:
+Si la cámara funciona correctamente:
 
-```bash
-python3 prueba_camara.py
-```
+- Se abrirá una ventana con video en tiempo real
+- La cámara comenzará a capturar imágenes
 
-Cerrar presionando:
+Para cerrar la ventana:
 
 ```text
-q
+Presionar la tecla q
 ```
 
 ---
 
-#  Entrenamiento de red neuronal en Roboflow
+#  Nota Importante sobre VideoCapture(0)
 
-#  ¿Qué es Roboflow?
+En OpenCV:
 
-Roboflow es una plataforma que permite entrenar modelos de inteligencia artificial para detectar objetos utilizando imágenes.
+```python
+cv2.VideoCapture(0)
+```
 
-En este proyecto se utilizará para clasificar:
+significa:
+
+```text
+Usar la cámara principal conectada al sistema
+```
+
+Si existen múltiples cámaras:
+
+```python
+cv2.VideoCapture(1)
+```
+
+o
+
+```python
+cv2.VideoCapture(2)
+```
+
+pueden utilizarse para seleccionar otra cámara.
+
+
+# Entrenamiento del Modelo de Inteligencia Artificial en Roboflow
+
+---
+
+# ¿Qué es Roboflow?
+
+Roboflow es una plataforma especializada en visión artificial que permite:
+
+- Crear datasets
+- Etiquetar imágenes
+- Entrenar modelos de inteligencia artificial
+- Exportar modelos compatibles con YOLOv8
+
+En este proyecto, Roboflow se utilizará para entrenar un modelo capaz de detectar y clasificar residuos automáticamente.
+
+---
+
+# Objetivo del Modelo
+
+El modelo de inteligencia artificial deberá identificar:
 
 - Residuos orgánicos
 - Residuos inorgánicos
 
+Posteriormente, el sistema utilizará esta clasificación para controlar automáticamente el mecanismo separador de la banda transportadora.
+
 ---
 
-#  Paso 1 — Crear cuenta
+# Paso 1 — Crear Cuenta en Roboflow
 
-Entrar a:
+Abrir en navegador:
 
 ```text
 https://roboflow.com
 ```
 
-Crear cuenta gratuita.
+Crear una cuenta gratuita utilizando:
+
+- Correo electrónico
+- Cuenta Google
+- Cuenta GitHub
 
 ---
 
-#  Paso 2 — Crear proyecto
+# Paso 2 — Crear Nuevo Proyecto
 
-Dar click en:
+Una vez dentro de Roboflow:
+
+Seleccionar:
 
 ```text
 Create New Project
 ```
 
-Seleccionar:
+Configurar el proyecto con los siguientes parámetros:
 
 | Opción | Valor |
 |---|---|
 | Project Type | Object Detection |
-| Nombre | basura_detector |
-| Categorías | organico, inorganico |
+| Project Name | detector_residuos |
+| Annotation Group | Default |
+| Classes | organico, inorganico |
 
 ---
 
-#  Paso 3 — Subir imágenes
+#  Explicación de las Clases
 
-Subir imágenes de residuos.
+## Clase: organico
 
-Se recomienda:
+Incluye residuos como:
 
-- 100 imágenes mínimo por categoría
+- Cáscaras
+- Frutas
+- Verduras
+- Restos de comida
+- Papel biodegradable
+
+---
+
+## Clase: inorganico
+
+Incluye residuos como:
+
+- Botellas
+- Latas
+- Plástico
+- Vidrio
+- Cartón
+- Envases
+
+---
+
+#  Paso 3 — Capturar Imágenes del Dataset
+
+El dataset es la parte MÁS importante del proyecto.
+
+La calidad del modelo depende directamente de la calidad de las imágenes utilizadas.
+
+---
+
+#  Recomendaciones para las Imágenes
+
+Se recomienda capturar:
+
+- Mínimo 100 imágenes por clase
 - Diferentes ángulos
-- Diferente iluminación
 - Diferentes tamaños
+- Diferentes posiciones
+- Diferentes fondos
+- Diferentes iluminaciones
 
 ---
 
-# Paso 4 — Etiquetar imágenes
+#  Ejemplos de Variación Necesaria
 
-Seleccionar cada imagen.
+El sistema debe aprender a reconocer objetos incluso cuando:
 
-Dibujar un cuadro alrededor del objeto.
+- La iluminación cambia
+- El objeto está inclinado
+- Existen sombras
+- El fondo cambia
+- La cámara está más cerca o más lejos
 
-Asignar clase:
+Mientras mayor variación exista en el dataset:
+
+Mejor precisión tendrá el modelo.
+
+---
+
+# Recomendaciones Profesionales
+
+Para obtener mejores resultados:
+
+-- Utilizar iluminación uniforme  
+-- Mantener buena resolución  
+-- Utilizar objetos reales de la banda  
+-- Capturar imágenes desde múltiples perspectivas  
+-- Incluir condiciones reales de operación
+
+---
+
+#  Errores Comunes al Crear el Dataset
+
+Evitar:
+
+- Imágenes borrosas
+- Imágenes oscuras
+- Fondos idénticos
+- Objetos cortados
+- Muy pocas imágenes
+- Clases desbalanceadas
+
+---
+
+#  Importancia del Balance de Clases
+
+El número de imágenes debe ser similar entre categorías.
+
+Ejemplo correcto:
+
+| Clase | Cantidad |
+|---|---|
+| organico | 120 |
+| inorganico | 115 |
+
+Ejemplo incorrecto:
+
+| Clase | Cantidad |
+|---|---|
+| organico | 300 |
+| inorganico | 20 |
+
+Un dataset desbalanceado reduce considerablemente la precisión del modelo.
+
+---
+
+#  Paso 4 — Subir Imágenes
+
+Dentro del proyecto:
+
+Seleccionar:
+
+```text
+Upload Images
+```
+
+Subir todas las imágenes del dataset.
+
+Esperar a que Roboflow termine la carga.
+
+---
+
+#  Paso 5 — Etiquetar Imágenes
+
+Para cada imagen:
+
+1. Dibujar un cuadro alrededor del objeto
+2. Seleccionar la clase correspondiente
+
+Ejemplo:
 
 ```text
 organico
@@ -830,15 +1213,30 @@ inorganico
 
 ---
 
-# Paso 5 — Generar dataset
+#  Recomendaciones para Etiquetado
 
-Dar click en:
+Las etiquetas deben:
+
+-- Cubrir completamente el objeto  
+-- Ser precisas  
+-- Evitar espacios vacíos excesivos  
+-- No cortar partes importantes del objeto
+
+Etiquetas incorrectas generan errores durante el entrenamiento.
+
+---
+
+#  Paso 6 — Generar Dataset
+
+Después del etiquetado:
+
+Seleccionar:
 
 ```text
 Generate Dataset
 ```
 
-Seleccionar:
+Elegir formato:
 
 ```text
 YOLOv8
@@ -846,41 +1244,62 @@ YOLOv8
 
 ---
 
-# Paso 6 — Entrenar modelo
+#  Data Augmentation
 
-Dar click en:
+Roboflow permite aplicar mejoras automáticas al dataset.
+
+Se recomienda activar:
+
+- Rotación
+- Brillo
+- Contraste
+- Escalado
+- Volteo horizontal
+
+Estas técnicas ayudan a mejorar la robustez del modelo.
+
+---
+
+# Paso 7 — Entrenar el Modelo
+
+Seleccionar:
 
 ```text
 Train Model
 ```
 
-Esperar a que Roboflow termine el entrenamiento.
+Roboflow comenzará el entrenamiento automáticamente.
+
+El tiempo de entrenamiento depende de:
+
+- Cantidad de imágenes
+- Resolución
+- Complejidad del dataset
 
 ---
 
-#  Paso 7 — Obtener API Key
+#  Métricas del Entrenamiento
 
-Ir a:
+Al finalizar, Roboflow mostrará métricas como:
 
-```text
-Workspace Settings
-```
-
-Copiar:
-
-```text
-API KEY
-```
+- mAP
+- Precisión
+- Recall
+- Loss
 
 ---
 
-# Paso 8 — Obtener código de inferencia
+# ¿Qué es mAP?
 
-Roboflow proporciona automáticamente código Python.
+El mAP (mean Average Precision) mide qué tan preciso es el modelo detectando objetos.
+
+Mientras más alto sea:
+
+-- Mejor será el rendimiento del sistema.
 
 ---
 
-# Descargar modelo entrenado
+#  Paso 8 — Exportar Modelo YOLOv8
 
 Ir a:
 
@@ -891,125 +1310,212 @@ Deploy
 Seleccionar:
 
 ```text
-Python
+YOLOv8
 ```
 
-Copiar el código.
+Descargar archivo:
+
+```text
+best.pt
+```
 
 ---
 
-#  Crear código principal
+#  Paso 9 — Guardar Modelo
 
-Ir a:
+Mover el archivo descargado a:
+
+```text
+modelos/
+```
+
+El archivo final debe quedar así:
+
+```text
+banda_inteligente/
+│
+├── modelos/
+│   └── best.pt
+```
+
+---
+
+#  Ventajas de Usar YOLOv8 Localmente
+
+El proyecto utiliza inferencia local debido a que:
+
+-- Es más rápido  
+-- No depende de internet  
+-- Reduce latencia  
+-- Es más estable  
+-- Tiene mejor rendimiento industrial  
+-- Permite procesamiento en tiempo real
+
+Esto hace que el sistema sea mucho más profesional y confiable.
+
+
+#  Generar Dataset
+
+Seleccionar:
+
+```text
+YOLOv8
+```
+
+Entrenar modelo.
+
+Descargar:
+
+```text
+best.pt
+```
+
+Mover el modelo a:
+
+```text
+modelos/
+```
+
+---
+
+#  ¿Por qué usar YOLOv8 Local y no Inferencia en la Nube?
+
+El sistema utiliza inferencia local porque ofrece:
+
+- Mayor velocidad
+- Menor latencia
+- No depende de internet
+- Mayor estabilidad industrial
+- Mejor rendimiento en tiempo real
+
+La inferencia en la nube puede introducir retrasos y fallos por conexión.
+
+---
+
+#  Conexiones de Arduino
+
+---
+
+## Conexiones del Servomotor
+
+| Cable del Servo | Arduino |
+|---|---|
+| Rojo (VCC) | 5V |
+| Negro/Café (GND) | GND |
+| Amarillo/Naranja (Señal) | Pin 9 |
+
+---
+
+## Conexiones del Driver L298N
+
+## Motor DC al L298N
+
+| Cable Motor DC | L298N |
+|---|---|
+| Cable 1 | OUT1 |
+| Cable 2 | OUT2 |
+
+---
+
+## Fuente Externa al L298N
+
+| Fuente | L298N |
+|---|---|
+| Positivo (+) | 12V |
+| Negativo (-) | GND |
+
+---
+
+## Conexiones L298N a Arduino
+
+| Pin L298N | Arduino |
+|---|---|
+| IN1 | Pin 5 |
+| IN2 | Pin 6 |
+| ENA | Pin 10 (PWM) |
+| GND | GND |
+
+---
+
+# Conexión Importante de Tierra (GND)
+
+TODAS las tierras deben conectarse juntas:
+
+- GND Arduino
+- GND L298N
+- GND Fuente Externa
+
+Esto es obligatorio para un funcionamiento estable.
+
+---
+
+# Reducción de Velocidad del Motor DC
+
+La velocidad de la banda transportadora se controla utilizando PWM desde Arduino.
+
+La señal PWM se envía mediante:
+
+```text
+ENA → Pin 10 de Arduino
+```
+
+El PWM permite:
+
+- Reducir velocidad
+- Control suave del motor
+- Mejor detección de objetos
+
+Sin reducción de velocidad:
+
+- La cámara pierde estabilidad
+- Aumenta el desenfoque por movimiento
+- Disminuye la precisión de YOLO
+
+---
+
+# Flujo General del Sistema
+
+```text
+Objeto entra en la banda
+↓
+Motor DC mueve la banda
+↓
+La cámara captura imagen
+↓
+YOLOv8 procesa el frame
+↓
+Python clasifica el residuo
+↓
+Python envía comando serial
+↓
+Arduino recibe señal
+↓
+Servomotor mueve el separador
+↓
+El residuo cae en el contenedor correcto
+```
+
+---
+
+#  Ejecución del Sistema
+
+Ir a la carpeta del proyecto:
 
 ```bash
-cd ~/banda_clasificadora/codigos
+cd ~/banda_inteligente/codigos
 ```
 
-Crear archivo:
-
-```bash
-nano clasificador.py
-```
-
----
-
-#  Código completo
-
-Pegar:
-
-```python
-from inference import get_model
-import cv2
-
-model = get_model(
-    model_id="TU_MODELO/1",
-    api_key="TU_API_KEY"
-)
-
-cap = cv2.VideoCapture(0)
-
-while True:
-
-    ret, frame = cap.read()
-
-    results = model.infer(frame)
-
-    predictions = results[0].predictions
-
-    for pred in predictions:
-
-        x = int(pred.x)
-        y = int(pred.y)
-        w = int(pred.width)
-        h = int(pred.height)
-
-        clase = pred.class_name
-
-        cv2.rectangle(
-            frame,
-            (x-w//2, y-h//2),
-            (x+w//2, y+h//2),
-            (0,255,0),
-            2
-        )
-
-        cv2.putText(
-            frame,
-            clase,
-            (x, y),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            1,
-            (0,255,0),
-            2
-        )
-
-    cv2.imshow("Clasificador", frame)
-
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
-cap.release()
-cv2.destroyAllWindows()
-```
-
----
-
-#  Ejecutar clasificador
-
-Ejecutar:
+Ejecutar clasificador:
 
 ```bash
 python3 clasificador.py
 ```
 
-La cámara comenzará a detectar residuos automáticamente.
-
 ---
 
-#  Comunicación entre Python y Arduino
+#  Verificar Puerto Arduino
 
-#  Objetivo
-
-Cuando Python detecta:
-
-```text
-organico
-```
-
-o
-
-```text
-inorganico
-```
-
-enviará información al Arduino para activar el mecanismo separador.
-
----
-
-# Conectar Arduino
-
-Conectar Arduino Mega por USB.
+Conectar Arduino por USB.
 
 Verificar puerto:
 
@@ -1025,158 +1531,26 @@ Debe aparecer:
 
 ---
 
-#  Código Arduino
+#  Subir Código al Arduino
 
 Abrir Arduino IDE.
 
-Crear archivo:
+Seleccionar:
 
-```text
-clasificador_arduino.ino
-```
+- Tarjeta Arduino
+- Puerto COM
 
-Pegar:
-
-```cpp
-#include <Servo.h>
-
-Servo servo;
-
-String dato = "";
-
-void setup() {
-
-  Serial.begin(115200);
-
-  servo.attach(9);
-
-  servo.write(90);
-}
-
-void loop() {
-
-  if (Serial.available()) {
-
-    dato = Serial.readStringUntil('\n');
-
-    if (dato == "organico") {
-
-      servo.write(30);
-      delay(1000);
-      servo.write(90);
-    }
-
-    if (dato == "inorganico") {
-
-      servo.write(150);
-      delay(1000);
-      servo.write(90);
-    }
-  }
-}
-```
+Subir el archivo `.ino`.
 
 ---
 
-#  Subir código Arduino
-
-1. Abrir Arduino IDE
-2. Seleccionar Arduino Mega
-3. Seleccionar puerto
-4. Dar click en Upload
+#  Problemas Comunes
 
 ---
 
-#  Código Python con comunicación serial
+# Cámara no detectada
 
-Editar:
-
-```bash
-nano clasificador.py
-```
-
-Agregar:
-
-```python
-import serial
-
-arduino = serial.Serial('/dev/ttyACM0',115200)
-```
-
----
-
-#  Enviar clasificación
-
-Debajo de:
-
-```python
-clase = pred.class_name
-```
-
-Agregar:
-
-```python
-arduino.write((clase + "\n").encode())
-```
-
----
-
-#  Ejecutar sistema completo
-
-## Terminal 1
-
-```bash
-cd ~/banda_clasificadora/codigos
-python3 clasificador.py
-```
-
-## Terminal 2
-
-Abrir Arduino IDE.
-
-Verificar que el código esté cargado.
-
----
-
-# ⚙️ Funcionamiento del sistema completo
-
-## 1. La banda mueve el residuo
-
-↓
-
-## 2. El sensor detecta el objeto
-
-↓
-
-## 3. La cámara captura imagen
-
-↓
-
-## 4. OpenCV procesa la imagen
-
-↓
-
-## 5. La red neuronal clasifica
-
-↓
-
-## 6. Python envía resultado al Arduino
-
-↓
-
-## 7. Arduino mueve el servomotor
-
-↓
-
-## 8. El residuo cae en el contenedor correcto
-
----
-
-# Problemas comunes
-
-# La cámara no funciona
-
-Verificar:
+Ejecutar:
 
 ```bash
 ls /dev/video*
@@ -1186,7 +1560,7 @@ ls /dev/video*
 
 # Arduino no detectado
 
-Verificar:
+Ejecutar:
 
 ```bash
 ls /dev/ttyACM*
@@ -1205,9 +1579,9 @@ newgrp dialout
 
 ---
 
-#  OpenCV no instalado
+# OpenCV no instalado
 
-Ejecutar:
+Instalar:
 
 ```bash
 pip install opencv-python
@@ -1215,39 +1589,59 @@ pip install opencv-python
 
 ---
 
-#  Mejoras futuras
+# YOLOv8 no instalado
 
-- Más categorías de residuos
-- Detección multicategoría
-- Clasificación industrial
-- Dashboard web
-- IA local sin internet
-- Sistema neumático
-- Banda industrial
+Instalar:
+
+```bash
+pip install ultralytics
+```
+
+---
+
+#  Mejoras Futuras
+
+Posibles mejoras:
+
+- Sistema neumático de clasificación
+- Aceleración TensorRT
+- Implementación en Jetson Nano
+- Múltiples cámaras
+- Banda transportadora industrial
+- Dashboard en tiempo real
+- IA embebida
+- Clasificación multicategoría
+
+---
+
+#  Aplicaciones Educativas
+
+Este proyecto permite aprender:
+
+- Inteligencia artificial
+- Visión artificial
+- Automatización industrial
+- Sistemas embebidos
+- Programación Arduino
+- Programación Python
+- Comunicación serial
+- Procesamiento digital de imágenes
+- Machine learning
 
 ---
 
 #  Conclusión
 
-El sistema de banda transportadora inteligente integra:
+La banda transportadora inteligente integra:
 
-- Automatización
+- Inteligencia artificial
 - Visión artificial
-- Inteligencia artificial
-- Electrónica
-- Mecánica
-
-permitiendo desarrollar una solución automática de clasificación de residuos sólidos.
-
-Además de su aplicación práctica, el proyecto sirve como plataforma educativa para aprender:
-
-- Python
-- OpenCV
-- Roboflow
-- Arduino
-- Inteligencia artificial
 - Automatización industrial
-- Procesamiento digital de imágenes
+- Electrónica embebida
+- Sistemas mecánicos
+
+para desarrollar un sistema automático de clasificación de residuos capaz de separar materiales orgánicos e inorgánicos de forma eficiente y estable en tiempo real.
+
 
 
 #  Referencias y Recursos Adicionales
