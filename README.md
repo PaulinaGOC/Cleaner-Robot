@@ -67,29 +67,56 @@ Para instalar ROS 2 Jazzy correctamente, lo más importante es elegir bien el si
 # 🛠️ Instrucciones 
 
 🔌 Diagrama de conexiones eléctricas
-Conexiones del Arduino Mega a los puentes H L298N
-|Componente L298N |Pin Arduino Mega|Notas|
-|:----------------:|:--------------:|:-------:|
-|L298N #1 (motores de tracción)|
-|:------------:|
-ENA (Enable motor A)6 (PWM)Velocidad motor derechoIN124Dirección motor derechoIN225Dirección motor derechoENB (Enable motor B)5 (PWM)Velocidad motor izquierdoIN322Dirección motor izquierdoIN423Dirección motor izquierdoL298N #2 (rodillo recolector)ENA9 (PWM)Velocidad rodilloIN126Dirección rodilloIN227Dirección rodillo
-Conexiones de los encoders al Arduino
-EncoderPin Arduino MegaNotasEncoder izquierdo - Canal A2Pin de interrupciónEncoder izquierdo - Canal B4Lectura digitalEncoder derecho - Canal A3Pin de interrupciónEncoder derecho - Canal B7Lectura digitalVCC encoders5V (Arduino)GND encodersGND (Arduino)
+### Conexiones del Arduino Mega a los puentes H L298N
+
+| Componente L298N | Pin Arduino Mega | Notas |
+|---|---|---|
+| **L298N #1 (motores de tracción)** | | |
+| ENA (Enable motor A) | 6 (PWM) | Velocidad motor derecho |
+| IN1 | 24 | Dirección motor derecho |
+| IN2 | 25 | Dirección motor derecho |
+| ENB (Enable motor B) | 5 (PWM) | Velocidad motor izquierdo |
+| IN3 | 22 | Dirección motor izquierdo |
+| IN4 | 23 | Dirección motor izquierdo |
+| **L298N #2 (rodillo recolector)** | | |
+| ENA | 9 (PWM) | Velocidad rodillo |
+| IN1 | 26 | Dirección rodillo |
+| IN2 | 27 | Dirección rodillo |
+
+### Conexiones de los encoders al Arduino
+
+| Encoder | Pin Arduino Mega | Notas |
+|---|---|---|
+| Encoder izquierdo - Canal A | 2 | **Pin de interrupción** |
+| Encoder izquierdo - Canal B | 4 | Lectura digital |
+| Encoder derecho - Canal A | 3 | **Pin de interrupción** |
+| Encoder derecho - Canal B | 7 | Lectura digital |
+| VCC encoders | 5V (Arduino) | |
+| GND encoders | GND (Arduino) | |
 
 ⚠️ Importante: los canales A de los encoders deben conectarse a pines de interrupción del Arduino Mega (pines 2, 3, 18, 19, 20 o 21). El Arduino Uno solo tiene 2 y 3.
 
-Alimentación
-ConexiónVoltajeNotasFuente 12V → Entrada L298N #1 (VCC motores)12VAlimentación motores tracciónFuente 12V → Entrada L298N #2 (VCC motor)12VAlimentación motor rodilloFuente 12V → Buck converter12V→5VPara Raspberry PiBuck 5V → Raspberry Pi (USB-C o pines GPIO)5V, mínimo 3ARaspberry Pi USB → Arduino Mega5V vía USBAlimenta y comunica al ArduinoGND común—Todos los GND deben estar conectados entre sí
+### Alimentación
+
+| Conexión | Voltaje | Notas |
+|---|---|---|
+| Fuente 12V → Entrada L298N #1 (VCC motores) | 12V | Alimentación motores tracción |
+| Fuente 12V → Entrada L298N #2 (VCC motor) | 12V | Alimentación motor rodillo |
+| Fuente 12V → Buck converter | 12V→5V | Para Raspberry Pi |
+| Buck 5V → Raspberry Pi (USB-C o pines GPIO) | 5V, mínimo 3A | |
+| Raspberry Pi USB → Arduino Mega | 5V vía USB | Alimenta y comunica al Arduino |
+| GND común | — | **Todos los GND deben estar conectados entre sí** |
+
 Comunicación Raspberry Pi ↔ Arduino
 
-Cable USB tipo B desde la Raspberry Pi al Arduino Mega.
-El Arduino se reconoce como /dev/ttyACM0 o /dev/ttyACM1 en Ubuntu.
-Velocidad de comunicación: 115200 baud.
+-Cable USB tipo B desde la Raspberry Pi al Arduino Mega.
+-El Arduino se reconoce como /dev/ttyACM0 o /dev/ttyACM1 en Ubuntu.
+-Velocidad de comunicación: 115200 baud.
 
 Conexión del LiDAR LD06
 
-Conectar al puerto USB de la Raspberry Pi mediante el adaptador USB-Serial que viene incluido.
-El LiDAR se reconoce como /dev/ttyUSB0.
+-Conectar al puerto USB de la Raspberry Pi mediante el adaptador USB-Serial que viene incluido.
+-El LiDAR se reconoce como /dev/ttyUSB0.
 
 
 
