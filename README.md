@@ -599,7 +599,7 @@ ros2 lifecycle set /slam_toolbox activate
 
 # SISTEMA SEPARADOR DE BASURA (BANDA TRANSPORTADORA INTELIGENTE)
 
-#  Introducción
+##  Introducción
 
 Esta sección del proyecto corresponde al sistema inteligente de clasificación de residuos mediante una banda transportadora automatizada.
 
@@ -623,7 +623,7 @@ Este tutorial está explicado paso a paso, pensando que se pueda replicar y mejo
 
 ---
 
-# Objetivo del sistema
+## Objetivo del sistema
 
 El sistema debe ser capaz de:
 
@@ -636,7 +636,7 @@ El sistema debe ser capaz de:
 
 ---
 
-#  Funcionamiento general del sistema
+##  Funcionamiento general del sistema
 
 El sistema funciona siguiendo esta secuencia:
 
@@ -664,9 +664,9 @@ Depositar residuo en contenedor
 
 ---
 
-#  Materiales necesarios
+##  Materiales necesarios
 
-#  Electrónica
+###  Electrónica
 
 | Componente | Cantidad |
 |---|---|
@@ -683,7 +683,7 @@ Depositar residuo en contenedor
 
 ---
 
-#  Mecánica
+###  Mecánica
 
 | Componente | Cantidad |
 |---|---|
@@ -696,7 +696,7 @@ Depositar residuo en contenedor
 
 ---
 
-#  Software necesario
+###  Software necesario
 
 | Software | Función |
 |---|---|
@@ -708,7 +708,7 @@ Depositar residuo en contenedor
 
 ---
 
-# Estructura del Proyecto
+## Estructura del Proyecto
 
 Crear carpeta principal:
 
@@ -741,11 +741,11 @@ banda_inteligente/
 
 ---
 
-# Instalación del Entorno Python en Windows (Visual Studio Code)
+## Instalación del Entorno Python en Windows (Visual Studio Code)
 
 ---
 
-# Paso 1 — Instalar Python
+### Paso 1 — Instalar Python
 
 Descargar Python desde:
 
@@ -769,7 +769,7 @@ Install Now
 
 ---
 
-#  Paso 2 — Verificar Instalación de Python
+###  Paso 2 — Verificar Instalación de Python
 
 Abrir:
 
@@ -797,7 +797,7 @@ Python 3.12.0
 
 ---
 
-#  Paso 3 — Verificar pip
+###  Paso 3 — Verificar pip
 
 Ejecutar:
 
@@ -809,7 +809,7 @@ Si aparece una versión, pip quedó instalado correctamente.
 
 ---
 
-#  Paso 4 — Crear Carpeta del Proyecto
+###  Paso 4 — Crear Carpeta del Proyecto
 
 En terminal:
 
@@ -830,7 +830,7 @@ mkdir arduino
 
 ---
 
-#  Paso 5 — Abrir Proyecto en Visual Studio Code
+###  Paso 5 — Abrir Proyecto en Visual Studio Code
 
 Ejecutar:
 
@@ -842,7 +842,7 @@ Esto abrirá automáticamente la carpeta del proyecto en VS Code.
 
 ---
 
-# Paso 6 — Instalar OpenCV
+### Paso 6 — Instalar OpenCV
 
 En terminal de VS Code ejecutar:
 
@@ -852,7 +852,7 @@ pip install opencv-python
 
 ---
 
-# Paso 7 — Instalar NumPy
+### Paso 7 — Instalar NumPy
 
 Ejecutar:
 
@@ -862,7 +862,7 @@ pip install numpy
 
 ---
 
-# Paso 8 — Instalar Comunicación Serial
+### Paso 8 — Instalar Comunicación Serial
 
 Ejecutar:
 
@@ -872,7 +872,7 @@ pip install pyserial
 
 ---
 
-# Paso 9 — Instalar YOLOv8
+### Paso 9 — Instalar YOLOv8
 
 Ejecutar:
 
@@ -882,7 +882,7 @@ pip install ultralytics
 
 ---
 
-# Paso 10 — Verificar Librerías Instaladas
+### Paso 10 — Verificar Librerías Instaladas
 
 Ejecutar:
 
@@ -901,7 +901,7 @@ ultralytics
 
 ---
 
-# Paso 11 — Seleccionar Intérprete Python en VS Code
+### Paso 11 — Seleccionar Intérprete Python en VS Code
 
 En Visual Studio Code:
 
@@ -919,7 +919,7 @@ Seleccionar la versión instalada de Python.
 
 ---
 
-# Paso 12 — Verificar Cámara USB
+### Paso 12 — Verificar Cámara USB
 
 Conectar cámara USB.
 
@@ -937,7 +937,7 @@ python prueba_camara.py
 
 ---
 
-# Paso 13 — Verificar Puerto Arduino
+### Paso 13 — Verificar Puerto Arduino
 
 Conectar Arduino por USB.
 
@@ -969,7 +969,7 @@ Ese puerto COM será utilizado en Python.
 
 ---
 
-#  Paso 14 — Instalar Extensión Python en VS Code
+###  Paso 14 — Instalar Extensión Python en VS Code
 
 Ir a:
 
@@ -986,11 +986,11 @@ Python
 Instalar la extensión oficial de Microsoft.
 
 
-# Configuración de Cámara USB en Windows
+## Configuración de Cámara USB en Windows
 
 ---
 
-# Paso 1 — Conectar la Cámara USB
+### Paso 1 — Conectar la Cámara USB
 
 Conectar la cámara USB a la computadora.
 
@@ -998,7 +998,7 @@ Esperar unos segundos a que Windows instale automáticamente los drivers.
 
 ---
 
-#  Paso 2 — Verificar que Windows Detecte la Cámara
+###  Paso 2 — Verificar que Windows Detecte la Cámara
 
 Abrir:
 
@@ -1035,7 +1035,7 @@ Si la cámara NO aparece:
 
 ---
 
-#  Paso 3 — Verificar Cámara en Python
+###  Paso 3 — Verificar Cámara en Python
 
 Crear archivo:
 
@@ -1069,7 +1069,7 @@ cv2.destroyAllWindows()
 
 ---
 
-#  Paso 4 — Ejecutar la Prueba
+###  Paso 4 — Ejecutar la Prueba
 
 Abrir terminal en Visual Studio Code y ejecutar:
 
@@ -1090,7 +1090,7 @@ Presionar la tecla q
 
 ---
 
-#  Nota Importante sobre VideoCapture(0)
+###  Nota Importante sobre VideoCapture(0)
 
 En OpenCV:
 
@@ -1119,11 +1119,11 @@ cv2.VideoCapture(2)
 pueden utilizarse para seleccionar otra cámara.
 
 
-# Entrenamiento del Modelo de Inteligencia Artificial en Roboflow
+## Entrenamiento del Modelo de Inteligencia Artificial en Roboflow
 
 ---
 
-# ¿Qué es Roboflow?
+### ¿Qué es Roboflow?
 
 Roboflow es una plataforma especializada en visión artificial que permite:
 
@@ -1136,7 +1136,7 @@ En este proyecto, Roboflow se utilizará para entrenar un modelo capaz de detect
 
 ---
 
-# Objetivo del Modelo
+### Objetivo del Modelo
 
 El modelo de inteligencia artificial deberá identificar:
 
@@ -1147,7 +1147,7 @@ Posteriormente, el sistema utilizará esta clasificación para controlar automá
 
 ---
 
-# Paso 1 — Crear Cuenta en Roboflow
+### Paso 1 — Crear Cuenta en Roboflow
 
 Abrir en navegador:
 
@@ -1163,7 +1163,7 @@ Crear una cuenta gratuita utilizando:
 
 ---
 
-# Paso 2 — Crear Nuevo Proyecto
+### Paso 2 — Crear Nuevo Proyecto
 
 Una vez dentro de Roboflow:
 
@@ -1184,9 +1184,9 @@ Configurar el proyecto con los siguientes parámetros:
 
 ---
 
-#  Explicación de las Clases
+##  Explicación de las Clases
 
-## Clase: organico
+### Clase: organico
 
 Incluye residuos como:
 
@@ -1198,7 +1198,7 @@ Incluye residuos como:
 
 ---
 
-## Clase: inorganico
+### Clase: inorganico
 
 Incluye residuos como:
 
@@ -1211,7 +1211,7 @@ Incluye residuos como:
 
 ---
 
-#  Paso 3 — Capturar Imágenes del Dataset
+##  Paso 3 — Capturar Imágenes del Dataset
 
 El dataset es la parte MÁS importante del proyecto.
 
@@ -1219,7 +1219,7 @@ La calidad del modelo depende directamente de la calidad de las imágenes utiliz
 
 ---
 
-#  Recomendaciones para las Imágenes
+##  Recomendaciones para las Imágenes
 
 Se recomienda capturar:
 
@@ -1232,7 +1232,7 @@ Se recomienda capturar:
 
 ---
 
-#  Ejemplos de Variación Necesaria
+## Ejemplos de Variación Necesaria
 
 El sistema debe aprender a reconocer objetos incluso cuando:
 
@@ -1248,7 +1248,7 @@ Mejor precisión tendrá el modelo.
 
 ---
 
-# Recomendaciones Profesionales
+## Recomendaciones Profesionales
 
 Para obtener mejores resultados:
 
@@ -1295,7 +1295,7 @@ Un dataset desbalanceado reduce considerablemente la precisión del modelo.
 
 ---
 
-#  Paso 4 — Subir Imágenes
+##  Paso 4 — Subir Imágenes
 
 Dentro del proyecto:
 
@@ -1311,7 +1311,7 @@ Esperar a que Roboflow termine la carga.
 
 ---
 
-#  Paso 5 — Etiquetar Imágenes
+##  Paso 5 — Etiquetar Imágenes
 
 Para cada imagen:
 
@@ -1332,7 +1332,7 @@ inorganico
 
 ---
 
-#  Recomendaciones para Etiquetado
+##  Recomendaciones para Etiquetado
 
 Las etiquetas deben:
 
@@ -1345,7 +1345,7 @@ Etiquetas incorrectas generan errores durante el entrenamiento.
 
 ---
 
-#  Paso 6 — Generar Dataset
+##  Paso 6 — Generar Dataset
 
 Después del etiquetado:
 
@@ -1363,7 +1363,7 @@ YOLOv8
 
 ---
 
-#  Data Augmentation
+##  Data Augmentation
 
 Roboflow permite aplicar mejoras automáticas al dataset.
 
@@ -1379,7 +1379,7 @@ Estas técnicas ayudan a mejorar la robustez del modelo.
 
 ---
 
-# Paso 7 — Entrenar el Modelo
+## Paso 7 — Entrenar el Modelo
 
 Seleccionar:
 
@@ -1418,7 +1418,7 @@ Mientras más alto sea:
 
 ---
 
-#  Paso 8 — Exportar Modelo YOLOv8
+##  Paso 8 — Exportar Modelo YOLOv8
 
 Ir a:
 
@@ -1440,7 +1440,7 @@ best.pt
 
 ---
 
-#  Paso 9 — Guardar Modelo
+##  Paso 9 — Guardar Modelo
 
 Mover el archivo descargado a:
 
