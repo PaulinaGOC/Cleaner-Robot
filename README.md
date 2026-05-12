@@ -3,6 +3,81 @@ El funcionamiento se divide en dos partes:
 La primera parte se basa  en un robot móvil autónomo diseñado para apoyar la recolección de residuos sólidos en espacios controlados. El robot inicia con el encendido del sistema y la inicialización de la Raspberry Pi, Arduino y ROS 2. Posteriormente, el robot comienza la lectura de sensores, principalmente el LiDAR, para detectar obstáculos y comprender su entorno.
 Una vez iniciado el sistema, el robot navega de manera autónoma siguiendo una ruta o puntos de referencia. Si detecta un obstáculo, evita la colisión y recalcula su trayectoria. Si detecta un residuo, se posiciona frente a él, activa el mecanismo de recolección y almacena el objeto dentro de su compartimiento interno.Luego, en la segunda parte consiste en clasificar y separar los residuos recolectados. Para ello, se utiliza una banda transportadora que, a través de visión y una red neuronal, puede clasificar residuos orgánicos e inorgánicos
 
+# Índice
+
+1. [Introducción General](#introducción-general)
+
+2. [Objetivo del Proyecto](#objetivo-del-proyecto)
+
+3. [Funcionamiento General del Sistema](#funcionamiento-general-del-sistema)
+
+4. [Arquitectura General del Sistema](#arquitectura-general-del-sistema)
+
+5. [Robot Recolector Autónomo](#robot-recolector-autónomo)
+
+   - [Hardware Necesario](#hardware-necesario)
+   - [Software Necesario](#software-necesario)
+   - [Arquitectura del Sistema](#arquitectura-del-sistema)
+   - [Instalación Necesaria](#instalación-necesaria)
+   - [Configuración ROS 2](#configuración-ros-2)
+   - [Instalación de Paquetes](#instalación-de-paquetes)
+   - [Configuración del LiDAR](#configuración-del-lidar)
+   - [Creación del Workspace](#creación-del-workspace)
+   - [Configuración del Paquete del Robot](#configuración-del-paquete-del-robot)
+   - [Compilación del Proyecto](#compilación-del-proyecto)
+   - [Diagrama de Conexiones Eléctricas](#diagrama-de-conexiones-eléctricas)
+   - [Teleoperación](#teleoperación)
+   - [SLAM y Construcción del Mapa](#slam-y-construcción-del-mapa)
+   - [Navegación Autónoma](#navegación-autónoma)
+   - [Waypoints](#waypoints)
+   - [Solución de Problemas](#solución-de-problemas)
+
+6. [Sistema Inteligente de Banda Transportadora](#sistema-inteligente-de-banda-transportadora)
+
+   - [Introducción](#introducción)
+   - [Objetivo del Sistema](#objetivo-del-sistema)
+   - [Funcionamiento General](#funcionamiento-general)
+   - [Materiales Necesarios](#materiales-necesarios)
+   - [Instalación del Entorno Python](#instalación-del-entorno-python)
+   - [Configuración de Cámara USB](#configuración-de-cámara-usb)
+
+7. [Entrenamiento del Modelo YOLOv8](#entrenamiento-del-modelo-yolov8)
+
+   - [Introducción a Roboflow](#introducción-a-roboflow)
+   - [Creación del Proyecto](#creación-del-proyecto)
+   - [Captura del Dataset](#captura-del-dataset)
+   - [Etiquetado de Imágenes](#etiquetado-de-imágenes)
+   - [Data Augmentation](#data-augmentation)
+   - [Entrenamiento del Modelo](#entrenamiento-del-modelo)
+   - [Exportación del Modelo](#exportación-del-modelo)
+
+8. [Automatización y Electrónica](#automatización-y-electrónica)
+
+   - [Conexiones Arduino](#conexiones-arduino)
+   - [Conexiones del Servomotor](#conexiones-del-servomotor)
+   - [Conexiones L298N](#conexiones-l298n)
+   - [Control PWM](#control-pwm)
+   - [Flujo General del Sistema](#flujo-general-del-sistema)
+
+9. [Código Fuente](#código-fuente)
+
+   - [Código Python YOLOv8](#código-python-yolov8)
+   - [Código Arduino](#código-arduino)
+
+10. [Ejecución del Sistema](#ejecución-del-sistema)
+
+11. [Problemas Comunes](#problemas-comunes)
+
+12. [Mejoras Futuras](#mejoras-futuras)
+
+13. [Aplicaciones Educativas](#aplicaciones-educativas)
+
+14. [Conclusiones](#conclusiones)
+
+15. [Referencias y Recursos Adicionales](#referencias-y-recursos-adicionales)
+
+16. [Contacto](#contacto)
+    
 
 # 📋 Requisitos previos 
 Antes de ejecutar el proyecto, se recomienda contar con los siguientes elementos:
