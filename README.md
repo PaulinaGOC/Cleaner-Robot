@@ -1,3 +1,47 @@
+<div align="center">
+
+#  Autonomous Waste Collection and Classification System
+
+### ROS 2 • YOLOv8 • OpenCV • LiDAR • Nav2 • Arduino • Raspberry Pi
+
+<img src="imagenes/banner.png" width="900">
+
+</div>
+
+---
+
+# Overview
+
+This project integrates:
+
+- Autonomous mobile robotics
+- Artificial intelligence
+- Computer vision
+- Industrial automation
+- ROS 2 navigation
+- YOLOv8 object detection
+
+The system is divided into two main subsystems:
+
+1. Autonomous waste collection robot
+2. Intelligent conveyor belt classification system
+
+---
+
+#  Main Features
+
+ Autonomous navigation using ROS 2 Nav2  
+ SLAM mapping using LiDAR LD06  
+ Differential drive robot  
+ Real-time waste classification  
+ YOLOv8 neural network  
+ Conveyor belt automation  
+ Arduino serial communication  
+ Real-time object detection  
+ Organic / inorganic classification
+
+---
+
 # Tutorial: Sistema de Recolección y Separación de basura
 El funcionamiento se divide en dos partes:
 La primera parte se basa  en un robot móvil autónomo diseñado para apoyar la recolección de residuos sólidos en espacios controlados. El robot inicia con el encendido del sistema y la inicialización de la Raspberry Pi, Arduino y ROS 2. Posteriormente, el robot comienza la lectura de sensores, principalmente el LiDAR, para detectar obstáculos y comprender su entorno.
