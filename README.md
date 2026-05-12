@@ -498,6 +498,12 @@ Esto genera dos archivos en ~/ros2_ws/maps/:
 
 💡 Cambia "mi_mapa" por el nombre que prefieras. Recuerda actualizar nav2_params.yaml para apuntar a este archivo.
 
+<div align="center">
+
+<img src="map.jpeg" width="900">
+
+</div>
+
 ### Modo 4: Navegación autónoma con Nav2
 
 Una vez que tengas un mapa guardado, puedes usar Nav2 para que el robot navegue solo.
