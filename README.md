@@ -10,35 +10,35 @@
 
 ---
 
-# Overview
+# Descripción General
 
-This project integrates:
+Este proyecto integra:
 
-- Autonomous mobile robotics
-- Artificial intelligence
-- Computer vision
-- Industrial automation
-- ROS 2 navigation
-- YOLOv8 object detection
+- Robótica móvil autónoma
+- Inteligencia artificial
+- Visión artificial
+- Automatización industrial
+- Navegación utilizando ROS 2
+- Detección de objetos con YOLOv8
 
-The system is divided into two main subsystems:
+El sistema está dividido en dos subsistemas principales:
 
-1. Autonomous waste collection robot
-2. Intelligent conveyor belt classification system
+1. Robot autónomo de recolección de residuos
+2. Sistema inteligente de clasificación mediante banda transportadora
 
 ---
 
-#  Main Features
+# Características Principales
 
- Autonomous navigation using ROS 2 Nav2  
- SLAM mapping using LiDAR LD06  
- Differential drive robot  
- Real-time waste classification  
- YOLOv8 neural network  
- Conveyor belt automation  
- Arduino serial communication  
- Real-time object detection  
- Organic / inorganic classification
+ Navegación autónoma utilizando ROS 2 Nav2  
+ Mapeo SLAM utilizando LiDAR LD06  
+ Robot con tracción diferencial  
+ Clasificación de residuos en tiempo real  
+ Red neuronal YOLOv8  
+ Automatización de banda transportadora  
+ Comunicación serial con Arduino  
+ Detección de objetos en tiempo real  
+ Clasificación de residuos orgánicos e inorgánicos  
 
 ---
 
