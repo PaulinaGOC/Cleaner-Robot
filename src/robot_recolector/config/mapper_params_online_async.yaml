@@ -1,0 +1,85 @@
+# ============================================================
+# slam_toolbox — Online Async SLAM
+# Robot: diferencial con LiDAR LD06
+# ROS2 Jazzy — Ubuntu 24.04
+# ============================================================
+
+slam_toolbox:
+  ros__parameters:
+
+    # ── Modo ────────────────────────────────────────────────
+    # mapping: construye mapa nuevo
+    # localization: localiza en mapa existente
+    mode: mapping
+
+    # ── Topics y frames ─────────────────────────────────────
+    odom_frame:  odom
+    map_frame:   map
+    base_frame:  base_link
+    scan_topic:  /scan
+
+    # ── Uso de odometría ────────────────────────────────────
+    # true  = usa TF odom->base_link (recomendado con encoders)
+    # false = solo LiDAR (más lento para converger)
+    use_pose_extrapolator: true
+    use_odometry: true
+
+    # ── Frecuencia del solver ────────────────────────────────
+    # RPi 5 tiene suficiente CPU para 0.5Hz sin problema
+    map_update_interval: 0.5        # segundos entre actualizaciones del mapa
+    resolution: 0.05                # metros por celda (5cm — buen balance)
+    max_laser_range: 8.0            # LD06 alcance máximo real ~12m, usamos 8m
+
+    # ── Filtro de escaneos ───────────────────────────────────
+    minimum_travel_distance: 0.2    # mínimo movimiento para procesar scan (m)
+    minimum_travel_heading: 0.1     # mínimo giro para procesar scan (rad)
+
+    # ── Loop closure ────────────────────────────────────────
+    # Detecta cuando el robot regresa a un lugar ya mapeado
+    do_loop_closing: true
+    loop_search_maximum_distance: 3.0
+    loop_match_minimum_chain_size: 10
+    loop_match_maximum_variance_coarse: 3.0
+    loop_match_minimum_response_coarse: 0.35
+    loop_match_minimum_response_fine: 0.45
+
+    # ── Correlación (matching de scans) ─────────────────────
+    correlation_search_space_dimension: 0.5
+    correlation_search_space_resolution: 0.01
+    correlation_search_space_smear_deviation: 0.1
+
+    # ── Loop closure correlation ─────────────────────────────
+    loop_search_space_dimension: 8.0
+    loop_search_space_resolution: 0.05
+    loop_search_space_smear_deviation: 0.03
+
+    # ── Scan matching ────────────────────────────────────────
+    distance_variance_penalty: 0.5
+    angle_variance_penalty: 1.0
+    fine_search_angle_offset: 0.00349
+    coarse_search_angle_offset: 0.349
+    coarse_angle_resolution: 0.0349
+    minimum_angle_penalty: 0.9
+    minimum_distance_penalty: 0.5
+    use_scan_matching: true
+    use_scan_barycenter: true
+
+    # ── Serialización (guardar/cargar mapa) ─────────────────
+    # Cambia la ruta si quieres guardar en otro lugar
+    map_file_name: /home/chosenone/ros2_ws/maps/mapa_robot
+    map_start_at_dock: false
+
+    # ── Parámetros del solver (Ceres) ────────────────────────
+    solver_plugin: solver_plugins::CeresSolver
+    ceres_linear_solver: SPARSE_NORMAL_CHOLESKY
+    ceres_preconditioner: SCHUR_JACOBI
+    ceres_trust_strategy: LEVENBERG_MARQUARDT
+    ceres_dogleg_type: TRADITIONAL_DOGLEG
+    ceres_loss_function: None
+
+    # ── Throttle para RPi ────────────────────────────────────
+    # Limita CPU — importante en hardware embebido
+    throttle_scans: 1               # procesa 1 de cada N scans (1=todos)
+    transform_publish_period: 0.05  # segundos entre publicaciones de TF map->odom
+    transform_timeout: 0.2
+    tf_buffer_duration: 30.0
