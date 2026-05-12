@@ -598,7 +598,11 @@ ros2 lifecycle set /slam_toolbox activate
 ```
 
 # SISTEMA SEPARADOR DE BASURA (BANDA TRANSPORTADORA INTELIGENTE)
+<div align="center">
 
+<img src="banda.jpeg" width="900">
+
+</div>
 ##  Introducción
 
 Esta sección del proyecto corresponde al sistema inteligente de clasificación de residuos mediante una banda transportadora automatizada.
@@ -968,7 +972,11 @@ Arduino Uno (COM4)
 Ese puerto COM será utilizado en Python.
 
 ---
+<div align="center">
 
+<img src="motor.png" width="900">
+
+</div>
 ###  Paso 14 — Instalar Extensión Python en VS Code
 
 Ir a:
