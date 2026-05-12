@@ -4,7 +4,7 @@
 
 ### ROS 2 • YOLOv8 • OpenCV • LiDAR • Nav2 • Arduino • Raspberry Pi
 
-<img src="imagenes/banner.png" width="900">
+<img src="maximus.jpeg" width="900">
 
 </div>
 
